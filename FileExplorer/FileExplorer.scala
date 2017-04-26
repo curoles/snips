@@ -5,6 +5,7 @@ import java.io._
 
 case class ExploreDir(dirName:String)
 case class ExploreFile(fileName:String)
+case class DoneExploringDir(dirName:String)
 
 class FileExplorer extends Actor {
 
@@ -13,8 +14,8 @@ class FileExplorer extends Actor {
             val dir = new File(dirName)
             val children = dir.listFiles()
             if (children != null) {
-                children.filter{_.isDirectory}.foreach{sender ! ExploreDir(_.getAbsolutePath)}
-                children.filter{!_.isDirectory}.foreach{sender ! ExploreFile(_.getAbsolutePath)}
+                children.filter{_.isDirectory}.foreach{subDir => sender ! ExploreDir(subDir.getAbsolutePath)}
+                children.filter{!_.isDirectory}.foreach{file => sender ! ExploreFile(file.getAbsolutePath)}
             }
             sender ! DoneExploringDir(dirName)
     }
@@ -26,7 +27,7 @@ class FilesExplorer extends Actor {
     val startTime = System.nanoTime
     var pending = 0
 
-    val fileEplorers = context.actorOf(
+    val fileExplorers = context.actorOf(
         RoundRobinPool(32).props(Props[FileExplorer])
     )
 
@@ -46,6 +47,9 @@ class FilesExplorer extends Actor {
 
         case ExploreFile(fileName) =>
             doFileAction(fileName)
+
+        case msg =>
+            println(s"unexpected message: $msg")
     }
 
     def doDirAction(dirName: String) = {
@@ -53,7 +57,7 @@ class FilesExplorer extends Actor {
     }
 
     def doFileAction(fileName: String) = {
-        println(s"file: ${dirName}")
+        println(s"file: ${fileName}")
     }
 
 }
@@ -61,5 +65,5 @@ class FilesExplorer extends Actor {
 object ListFiles extends App {
     val system = ActorSystem("ls")
     val ls = system.actorOf(Props[FilesExplorer])
-    ls ! args(0)
+    ls ! ExploreDir(args(0))
 }
