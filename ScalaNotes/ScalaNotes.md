@@ -70,9 +70,121 @@ semicolon val v = new A...; {}
 ==============================
 
 
+aux constructor
+==============
+first statement must be call to primary|aux constructor
+
+init var to def value
+=====================
+var s: String = _
 
 
+method overriding requires override keyword
+===========================================
+
+only primary constructor calls base ctor
+=========================================
+primary ctor acts as the gateway to init an instance of a class
 
 
+# Map getOrElseUpdate
 
- 
+```
+object MarkerFactory {
+  private val markers = Map(
+    "red" -> new Marker("red"),
+    "blue" -> new Marker("blue"),
+    ...
+
+  def getMarker(color: String) =
+    markers.getOrElseUpdate(color, new Marker(color))
+}
+```
+
+# private primary ctor
+```
+class Marker private(val color: String){...}
+```
+
+# companion class and companion object
+can access everything of each other
+
+# pool of instances
+```
+class Marker private(val color: String){...}
+
+object Marker {
+  private val markers = Map(
+    "red" -> new Marker("red"),
+    "blue" -> new Marker("blue"),
+    ...
+
+  def getMarker(color: String) =
+    markers.getOrElseUpdate(color, new Marker(color))
+}
+
+```
+
+# class-level operations
+
+```
+class Marker private(val color: String){
+  override def toString = s"marker color $color"
+}
+
+object Marker {
+  private val markers = Map(
+    "red" -> new Marker("red"),
+    "blue" -> new Marker("blue"),
+    ...
+
+  def getMarker(color: String) =
+    markers.getOrElseUpdate(color, new Marker(color))a
+
+  def apply(color: String) = getMarker(color) // to use like Marker("red")
+
+  def supportedColors = markers.keys
+}
+
+```
+
+# enumerations
+```
+object Color extends Enumeration {
+  type Color = Value // for compiler to treat Color as type instead of an instance
+  val RED, GREEN, BLUE = Value
+}
+
+class A(val clr: Color, ...
+
+Color.values.foreach {clr => println(clr)}
+```
+
+# package object
+```
+//File aaa/bbb/package.scala
+package aaa
+
+package object bbb {
+  def fun(...){}
+}
+
+//File aaa/bbb/Ccc.scala
+package aaa.bbb
+
+...
+  fun(...)
+
+# importing a package auto imports corresponding package object
+
+trick to do in package object: type List[T] = scala.collection.immutable.List[T]
+```
+
+# Option type forces to check result "!=null"
+```
+def fun ... {
+  if () Some("good") else None
+}
+val res = fun(...)
+val a = res.getOrElse("oops")
+```
