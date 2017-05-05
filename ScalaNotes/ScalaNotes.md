@@ -188,3 +188,57 @@ def fun ... {
 val res = fun(...)
 val a = res.getOrElse("oops")
 ```
+
+# Loan Pattern
+```
+import java._io
+
+def writeToFile(fileName: String)(codeBlock: PrinterWriter => Unit) {
+  val writer = new PrintWriter(new File(fileName))
+  try { codeBlock(writer) }
+  finally { writer.close() }
+}
+```
+
+```
+writeToFile("output.txt") { writer =>
+  writer write "hello from Me"
+}
+```
+
+# Execute Around Method Pattern (Code Sandwich)
+
+To clean up (free/unlock) a resource automatically after using it.
+https://gist.github.com/dpsoft/9013481
+http://pages.cs.wisc.edu/~liblit/tr-1647/
+http://java-design-patterns.com/patterns/execute-around/
+
+```
+class Resource private() {
+  println("starting transaction...")
+  private def cleanUp() { ... }
+  def op1() = ...
+  def op2() = ...
+  def op3() = ...
+}
+
+object Resource {
+  def use(codeBlock: Resource => Unit) {
+    val resource = new Resource
+    try {
+        codeBlock(resource)
+    }
+    finally {
+        resource.cleanUp()
+    }
+  }
+}
+```
+
+```
+Resource.use { resource =>
+  resource.op1()
+  resource.op3()
+  resource.op2()
+}
+```
