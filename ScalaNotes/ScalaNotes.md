@@ -242,3 +242,63 @@ Resource.use { resource =>
   resource.op2()
 }
 ```
+
+# Partially Applied Function, log with Date
+```
+import java.util.Date
+
+def log(date: Date, message: String) = {
+//...
+println(s"$date...message")
+}
+```
+
+```
+val date = new Date(...
+//logWithDateBound
+val logD = log(date, _ : String)
+logD("message1")
+logD("message2")
+
+```
+
+# function values
+```
+val calculator = {input: Int => function implementation}
+```
+
+
+# Decorator Design Pattern
+
+```
+abstract class Check {
+  def check : String = ...
+
+}
+
+trait checkA extends Check {
+  override def check : String = ...super.check
+}
+
+trait checkB extends Check {
+  override def check : String = ...super.check
+}
+
+trait checkC extends Check {
+  override def check : String = ...super.check
+}
+
+
+```
+
+```
+val acCheck = new Check with CheckA with CheckC
+
+// called: C then A then Check
+acCheck.check
+```
+
+# val c = new C with A with B, late method binding, abstract override
+
+Pragmatic Scala, ch 7 page 126, MethodBinding.scala
+https://pragprog.com/titles/vsscala2/source_code
