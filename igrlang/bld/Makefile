@@ -4,7 +4,7 @@ OBJ_DIR := $(BUILD_DIR)/obj
 .PHONY: all
 all: $(OBJ_DIR)/igr
 
-CFLAGS := $(CFLAGS) -Wall -Werror
+CFLAGS := $(CFLAGS) -Wall -Werror -fopenmp
 
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
 	mkdir -p $(@D)

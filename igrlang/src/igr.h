@@ -18,4 +18,6 @@ bool;
 
 #define sizeof_array(a) ((sizeof(a))/(sizeof(a[0])))
 
+enum RetStatus {SUCCESS=0, FAIL=1};
+
 #endif /*IGR_H_INCLUDED*/

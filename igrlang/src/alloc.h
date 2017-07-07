@@ -20,4 +20,6 @@ void deallocate(
 
 #define NEW0(p, a) memset(NEW((p),(a)), 0, sizeof(*(p)))
 
+bool test_allocate();
+
 #endif /*IGR_ALLOC_H_INCLUDED*/

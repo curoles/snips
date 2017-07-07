@@ -3,17 +3,15 @@
 #include <assert.h>
 
 #include "alloc.h"
+#include "print.h"
 
-static
-bool test_allocate()
-{
-    void* mem = allocate(16, 0);
-    assert(mem != NULL);
-    return true;
-}
 
 bool selfcheck()
 {
-    test_allocate();
-    return false;
+    if (!test_allocate()) {
+        print_error("Test 'allocate' FAILED\n");
+        return false;
+    }
+
+    return true;
 }
