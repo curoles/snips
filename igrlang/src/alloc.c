@@ -116,36 +116,56 @@ void deallocate(
 
     assert(arena_id < sizeof_array(g_arena));
 
-    g_arena[arena_id]->next = g_freeBlocks;
-    g_freeBlocks = g_firstBlock[arena_id].next;
-    g_firstBlock[arena_id].next = NULL;
-    g_arena[arena_id] = &g_firstBlock[arena_id];
+    g_arena[arena_id]->next = g_freeBlocks;     // add free blocks to used blocks
+    g_freeBlocks = g_firstBlock[arena_id].next; // free = used by ptr assignment
+    g_firstBlock[arena_id].next = NULL;         // collapse list of used blocks
+    g_arena[arena_id] = &g_firstBlock[arena_id];// point current used block to head
 }
 
 static
 void inspect_allocations(arena_t arena_id)
 {
-    ArenaBlock* block = g_freeBlocks;
+    const ArenaBlock* block = g_freeBlocks;
 
-    print_note("Free blocks:\n");
+
+    void print_block(const char* m, const ArenaBlock* blk) {
+        ulong blk_size = (ulong)blk->limit - (ulong)blk - sizeof(ArenaBlock);
+        ulong blk_used = (ulong)blk->avail - (ulong)blk - sizeof(ArenaBlock);
+        uint blk_used_percent = (((double)blk_used)/blk_size)*100;
+        print_note("%s %p [%p..%p] %8lu %8lu %3u%% ->%p\n",
+            m, blk, blk->avail, blk->limit,
+            blk_size, blk_used, blk_used_percent, blk->next);
+    }
+
+    print_note("Blocks:\n");
 
     while (block != NULL) {
-        print_note("free %p[%p..%p], next=%p\n",
-            block, block->avail, block->limit, block->next);
+        if (block != &g_firstBlock[arena_id]){
+            print_block("-", block);
+        }
         block = block->next;
     }
 
     block = g_arena[arena_id];
 
-    print_note("Allocated blocks:\n");
-
     while (block != NULL) {
-        print_note("block %p[%p..%p], next=%p\n",
-            block, block->avail, block->limit, block->next);
+        if (block != &g_firstBlock[arena_id]){
+            print_block("+", block);
+        }
         block = block->next;
     }
 
 }
+
+void show_allocations()
+{
+    print_note("Show allocated memory blocks.\n");
+
+    for (int arena_id = 0; arena_id < 1; ++arena_id) {
+        inspect_allocations(arena_id);
+    }
+}
+
 
 bool test_allocate()
 {

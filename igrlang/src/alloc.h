@@ -22,4 +22,6 @@ void deallocate(
 
 bool test_allocate();
 
+void show_allocations();
+
 #endif /*IGR_ALLOC_H_INCLUDED*/

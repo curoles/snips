@@ -14,6 +14,7 @@ SRCs :=
 SRCs += alloc.c
 SRCs += selfcheck.c
 SRCs += print.c
+SRCs += options.c
 SRCs += igr.c
 
 SRCS := $(addprefix $(SRC_DIR)/,$(SRCs))

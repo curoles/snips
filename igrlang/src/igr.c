@@ -3,17 +3,26 @@
 #include "igr.h"
 #include "selfcheck.h"
 #include "print.h"
+#include "options.h"
+#include "alloc.h"
 
 
 int main(int argc, const char* argv[])
 {
     enable_print_colors(true);
 
+    parse_options(argc, argv);
+
     if (!selfcheck()) {
         printf("Self checking test %sFAILED%s\n",
             prtclr(PCLR_BOLD_RED), prtclr(PCLR_NONE));
         return FAIL;
     }
+
+    if (get_options()->show_mem_alloc) {
+        show_allocations();
+    }
+
     return SUCCESS;
 }
 
