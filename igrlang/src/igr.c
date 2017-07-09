@@ -5,6 +5,7 @@
 #include "print.h"
 #include "options.h"
 #include "alloc.h"
+#include "string.h"
 
 
 int main(int argc, const char* argv[])
@@ -19,9 +20,14 @@ int main(int argc, const char* argv[])
         return FAIL;
     }
 
+    show_string_hash_distribution(/*chunk=*/100);
+
     if (get_options()->show_mem_alloc) {
         show_allocations();
     }
+
+
+    delete_all_allocations();
 
     return SUCCESS;
 }

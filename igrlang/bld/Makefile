@@ -11,7 +11,7 @@ $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -MMD -c $< -o $@
 
 SRCs := 
-SRCs += alloc.c
+SRCs += alloc.c string.c
 SRCs += selfcheck.c
 SRCs += print.c
 SRCs += options.c

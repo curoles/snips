@@ -16,6 +16,8 @@ void deallocate(
     arena_t arenaId
 );
 
+void delete_all_allocations();
+
 #define NEW(p, a) ((p) = allocate(sizeof(*(p)), (a)))
 
 #define NEW0(p, a) memset(NEW((p),(a)), 0, sizeof(*(p)))

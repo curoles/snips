@@ -50,7 +50,7 @@ ArenaBlock* allocate_new_block(ArenaBlock* block, ulong size)
     block->next = malloc(new_block_size);
     ArenaBlock* new_block = block->next;
 
-    DBG("new block allocated %p\n", new_block);
+    //DBG("new block allocated %p\n", new_block);
 
     //assert(new_block != NULL);
 
@@ -67,7 +67,7 @@ ArenaBlock* allocate_new_block(ArenaBlock* block, ulong size)
 static
 ArenaBlock* get_new_block(ArenaBlock* block, ulong size)
 {
-    DBG("get new block size=%lu\n", size);
+    //DBG("get new block size=%lu\n", size);
 
     assert(block != NULL);
 
@@ -122,8 +122,26 @@ void deallocate(
     g_arena[arena_id] = &g_firstBlock[arena_id];// point current used block to head
 }
 
+void delete_all_allocations()
+{
+    // Move all blocks into the free list.
+    for (int arena_id = 0; arena_id < sizeof_array(g_arena); ++arena_id) {
+        deallocate(arena_id);
+    }
+
+    ArenaBlock* block = g_freeBlocks;
+
+    while (block != NULL) {
+        ArenaBlock* next_block = block->next;
+        if (block->limit != NULL) { // do not delete first/head block
+            free(block);
+        }
+        block = next_block;
+    }
+}
+
 static
-void inspect_allocations(arena_t arena_id)
+void inspect_allocations()
 {
     const ArenaBlock* block = g_freeBlocks;
 
@@ -140,51 +158,49 @@ void inspect_allocations(arena_t arena_id)
     print_note("Blocks:\n");
 
     while (block != NULL) {
-        if (block != &g_firstBlock[arena_id]){
+        if (block->limit != NULL){ // do not show first/head block
             print_block("-", block);
         }
         block = block->next;
     }
 
-    block = g_arena[arena_id];
+    for (int arena_id = 0; arena_id < sizeof_array(g_firstBlock); ++arena_id) {
 
-    while (block != NULL) {
-        if (block != &g_firstBlock[arena_id]){
+        block = g_firstBlock[arena_id].next;
+    
+        while (block != NULL) {
             print_block("+", block);
+            block = block->next;
         }
-        block = block->next;
     }
 
 }
 
 void show_allocations()
 {
-    print_note("Show allocated memory blocks.\n");
-
-    for (int arena_id = 0; arena_id < 1; ++arena_id) {
-        inspect_allocations(arena_id);
-    }
+    inspect_allocations();
 }
 
 
 bool test_allocate()
 {
+#if (0)
     inspect_allocations(0);
     void* mem = allocate(16, 0);
     assert(mem != NULL);
-    inspect_allocations(0);
+    inspect_allocations();
     mem = allocate(161, 0);
     assert(mem != NULL);
-    inspect_allocations(0);
+    inspect_allocations();
     mem = allocate(BLOCK_MIN_SIZE, 0);
     assert(mem != NULL);
-    inspect_allocations(0);
+    inspect_allocations();
     deallocate(0);
-    inspect_allocations(0);
+    inspect_allocations();
 
     mem = allocate(32, 0);
-    inspect_allocations(0);
-
+    inspect_allocations();
+#endif
     return true;
 }
 
