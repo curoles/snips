@@ -3,14 +3,17 @@
 #ifndef IGR_OPTIONS_H_INCLUDED
 #define IGR_OPTIONS_H_INCLUDED
 
+#include "igr.h"
+
 typedef
 struct Options
 {
-  int show_mem_alloc;
+    int show_mem_alloc;
+    int show_str_dist;
 }
 Options;
 
-int parse_options(int argc, const char* argv[]);
+bool parse_options(int argc, const char* argv[]);
 
 Options* get_options();
 

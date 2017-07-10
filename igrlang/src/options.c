@@ -115,7 +115,7 @@ parse_opt (int key, char *arg, struct argp_state *state)
 
 static struct argp argp = { options, parse_opt, 0/*args_doc*/, doc };
 
-int parse_options(int argc, const char* argv[])
+bool parse_options(int argc, const char* argv[])
 {
     set_default_options();
 
@@ -123,5 +123,5 @@ int parse_options(int argc, const char* argv[])
 
     dbg_note("Command line arguments are parsed\n");
 
-    return 0;
+    return true;
 }
