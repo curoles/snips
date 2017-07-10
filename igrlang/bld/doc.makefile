@@ -1,0 +1,10 @@
+DOC_BUILD_DIR := $(BUILD_DIR)/doc
+
+.PHONY: doc
+doc: DOXY_CFG := SOURCE_PATH=$(SOURCE_PATH) OUTPUT_DIR=$(DOC_BUILD_DIR)
+doc: $(DOC_BUILD_DIR)
+	$(DOXY_CFG) doxygen $(SOURCE_PATH)/doc/Doxyfile
+
+$(DOC_BUILD_DIR):
+	mkdir -p $(DOC_BUILD_DIR)
+

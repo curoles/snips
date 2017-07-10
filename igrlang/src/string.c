@@ -1,3 +1,11 @@
+/**@file
+ * @brief     Custom string allocation
+ * @author    Igor Lesik 2017
+ * @copyright Igor Lesik 2017
+ *
+ *
+ *
+ */
 #include "string.h"
 
 #include <assert.h>
@@ -20,9 +28,9 @@ char* string(char* s)
 typedef struct String String;
 
 struct String {
-    char* str;
-    uint len;
-    String* link;
+    char* str;     ///< allocated C string
+    uint len;      ///< length of the string
+    String* link;  ///< next allocated string in a list/bucket
 };
 
 // hash table
@@ -74,6 +82,11 @@ uint hash(char* key, uint len)
     return hash;
 }
 
+/** Store input string in permanently allocated memory space. 
+ *  @param s input string
+ *  @param len lenght of input string, \0 included
+ *  @return pointer to permanently stored copy of input string
+ */
 char* stringL(char* str, uint len)
 {
     uint bucket_id = hash(str, len);

@@ -8,17 +8,17 @@
 #define BLOCK_MIN_SIZE (10*1024)
 
 union MemAlign {
-    long l;
-    char* p;
-    double d;
-    int (*f)(void);
+    long l;         ///< long integer
+    char* p;        ///< data pointer
+    double d;       ///< double floating number
+    int (*f)(void); ///< function pointer
 };
 
 typedef
 struct ArenaBlock {
-    struct ArenaBlock* next;
-    byte* limit;
-    byte* avail;
+    struct ArenaBlock* next; ///< next block in a list
+    byte* limit; ///< pointer to the last byte of the block
+    byte* avail; ///< pointer to the beginning of free space in the block
 } ArenaBlock
 __attribute__ ((aligned (sizeof(union MemAlign))));
 

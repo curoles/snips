@@ -1,3 +1,11 @@
+/**@file
+ * @brief     Custom memory allocation
+ * @author    Igor Lesik 2017
+ * @copyright Igor Lesik 2017
+ *
+ *
+ *
+ */
 #pragma once
 
 #ifndef IGR_ALLOC_H_INCLUDED
@@ -7,6 +15,9 @@
 
 typedef uint arena_t;
 
+/** Allocate chunk of memory with custom allocation tool.
+ *
+ */
 void* allocate(
     ulong size,
     arena_t arenaId

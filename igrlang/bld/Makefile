@@ -11,7 +11,7 @@ $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -MMD -c $< -o $@
 
 SRCs := 
-SRCs += alloc.c string.c
+SRCs += alloc.c string.c sym.c
 SRCs += selfcheck.c
 SRCs += print.c
 SRCs += options.c
@@ -35,3 +35,5 @@ clean:
 	rm -rf $(OBJ_DIR)
 
 -include $(DEPS)
+
+include $(SOURCE_PATH)/bld/doc.makefile
