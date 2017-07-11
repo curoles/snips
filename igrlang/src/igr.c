@@ -8,6 +8,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "igr.h"
 #include "selfcheck.h"
@@ -15,6 +16,16 @@
 #include "options.h"
 #include "alloc.h"
 #include "string.h"
+
+typedef struct CompilerData {
+    FILE* input_file;
+    FILE* output_file;
+
+    Options* op;
+}
+CompilerData;
+
+static CompilerData data = {0,};
 
 static
 void cleanup_on_exit()
@@ -25,6 +36,16 @@ void cleanup_on_exit()
     already_cleaned = true;
 
     dbg_note("cleanup on exit\n");
+
+    if (data.input_file) {
+        fclose(data.input_file);
+        data.input_file = NULL;
+    }
+
+    if (data.output_file) {
+        fclose(data.output_file);
+        data.output_file = NULL;
+    }
 
     delete_all_allocations();
 }
@@ -41,6 +62,8 @@ bool pre_init()
 
     enable_print_colors(true);
 
+    data.op = get_options();
+
     return true;
 }
 
@@ -51,6 +74,22 @@ bool init()
         print_error("Self checking test FAILED\n");
         return false;
     }
+
+    if ((data.input_file=fopen(data.op->input_file,"r")) == NULL) {
+        print_error("can't open input file %s\n", data.op->input_file);
+        return false;
+    }
+
+    if (strlen(data.op->output_file) == 0) {
+        const char* filename = strrchr(data.op->input_file,'/')? : data.op->input_file;
+        data.op->output_file = string_append(filename, ".s");
+    }
+
+    if ((data.output_file=fopen(data.op->output_file,"w")) == NULL) {
+        print_error("can't open output file %s\n", data.op->output_file);
+        return false;
+    }
+
 
     return true;
 }
@@ -86,6 +125,7 @@ int main(int argc, const char* argv[])
         return EXIT_FAILURE;
     }
 
+//TODO see page 306
 
     if (!on_finish()) {
         print_error("on_finish failed\n");

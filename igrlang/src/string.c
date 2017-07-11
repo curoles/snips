@@ -10,6 +10,7 @@
 
 #include <assert.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "alloc.h"
 
@@ -113,7 +114,16 @@ char* stringL(char* str, uint len)
     return alloc_str;
 }
 
-#include <stdio.h>
+char* string_append(const char* str1, const char* str2)
+{
+    char buf[1024];
+    size_t len = snprintf(buf, sizeof(buf), "%s%s", str1, str2);
+
+    assert(sizeof(buf) > len);
+
+    return stringL(buf, len);
+}
+
 
 char* stringd(int value)
 {

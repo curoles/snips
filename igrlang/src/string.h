@@ -28,6 +28,8 @@ char* stringL(char* s, uint lenght);
 
 char* stringd(int val);
 
+char* string_append(const char* str1, const char* str2);
+
 void show_string_hash_distribution(uint chunk);
 
 #endif /*IGR_STRING_H_INCLUDED*/
