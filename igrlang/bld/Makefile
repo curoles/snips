@@ -12,6 +12,7 @@ $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
 
 SRCs := 
 SRCs += alloc.c string.c sym.c
+SRCs += back/x86_gas.c
 SRCs += selfcheck.c
 SRCs += print.c
 SRCs += options.c

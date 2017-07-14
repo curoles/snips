@@ -108,6 +108,21 @@ bool on_finish()
     return true;
 }
 
+void x86_gen_function(
+    FILE* out
+);
+
+
+static
+bool compile()
+{
+//TODO see page 306
+
+
+    x86_gen_function(data.output_file);
+    return true;
+}
+
 int main(int argc, const char* argv[])
 {
     if (!pre_init()) {
@@ -125,7 +140,10 @@ int main(int argc, const char* argv[])
         return EXIT_FAILURE;
     }
 
-//TODO see page 306
+    if (!compile()) {
+        print_error("compile failed\n");
+        return EXIT_FAILURE;
+    }
 
     if (!on_finish()) {
         print_error("on_finish failed\n");
