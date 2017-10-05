@@ -1,7 +1,10 @@
 //https://github.com/jameswmccarty/Fractal-Flame-Algorithm-in-C/blob/master/fractal.c
-//Ubuntu 17.04: sudo apt-get install libtiff-dev
+//http://flam3.com/flame.pdf
 //
 // check https://github.com/crapp/geomandel
+//
+//Ubuntu 17.04: sudo apt-get install libtiff-dev
+//
 //
 //
 #include "write_to_tiff.h"
