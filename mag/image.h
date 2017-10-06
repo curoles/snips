@@ -51,3 +51,12 @@ void
 Image_set(Image* image, int x, int y, Pixel* clr) {
     *(Image_at(image, x, y)) = *clr;
 }
+
+static inline
+void
+Image_setSafe(Image* image, int x, int y, Pixel* clr) {
+    if (0 <= x && x < image->xres && 0 <= y && y < image->yres) {
+        *(Image_at(image, x, y)) = *clr;
+    }
+}
+

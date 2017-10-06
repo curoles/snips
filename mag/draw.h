@@ -15,7 +15,7 @@ typedef struct GLine
 {
     GPoint currentPoint;
     size_t width;
-    Pixel clr;
+    Pixel pxl;
 }
 GLine;
 
@@ -48,3 +48,19 @@ void GLine_drawTo2(Image* image, GLine* line, GPoint end) {
 }
 
 
+void
+GCircle_draw(
+    Image* image,
+    Pixel* pixel,
+    int xm, int ym,
+    int r
+);
+
+void
+GRing_draw(
+    Image* image,
+    Pixel* pixel,
+    int xm, int ym,
+    unsigned int intR,
+    unsigned int extR
+);

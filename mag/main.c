@@ -5,6 +5,15 @@
 
 #include <stdlib.h>
 
+void drawCircle(void* context, int x0, int y0, int x1, int y1)
+{
+    Image* image = (Image*)context;
+
+    Pixel pixel = {.clr[RED]=x1, .clr[GREEN]=y1, .clr[BLUE]=y1-x1};
+
+    GRing_draw(image, &pixel, x1, y1, 10, 20);
+}
+
 void render(Image* image)
 {
     for (size_t row = 0; row < image->yres; row++)
@@ -16,13 +25,18 @@ void render(Image* image)
         }
     }
 
-    GLine line = {.clr.clr[RED]=0, .clr.clr[GREEN]=0, .clr.clr[BLUE]=0};
+    Pixel blackPixel = {.clr[RED]=0, .clr[GREEN]=0, .clr[BLUE]=0};
+
+    GLine line = {.pxl=blackPixel};
     //GLine_drawFromTo(image, &line, 0, 0, 250, 250);
     //GLine_drawFromTo(image, &line, 250, 250, 450, 250);
     //GLine_drawFromTo(image, &line, 450, 250, 450, 450);
+    GCircle_draw(image, &blackPixel, 250, 250, 100);
 
     line.currentPoint.x = 0; line.currentPoint.y = 0;
-    hilbert(image, &line, 0, 0, 500, 0, 0, 500, 6); 
+    HilbertCurve_drawLine(image, &line, 0, 0, 500, 0, 0, 500, 3);
+
+    HilbertCurve_visit(drawCircle, image, 0, 0, 500, 0, 0, 500, 3);
 }
 
 int main(int argc, char* argv[])
