@@ -1,17 +1,19 @@
 #include "image.h"
 #include "draw.h"
 #include "hilbert.h"
+#include "draw_triangle.h"
 #include "write_to_tiff.h"
 
 #include <stdlib.h>
 
-void drawCircle(void* context, int x0, int y0, int x1, int y1)
+void drawSomething(void* context, int x0, int y0, int x1, int y1)
 {
     Image* image = (Image*)context;
 
     Pixel pixel = {.clr[RED]=x1, .clr[GREEN]=y1, .clr[BLUE]=y1-x1};
 
-    GRing_draw(image, &pixel, x1, y1, 10, 20);
+    //GRing_draw(image, &pixel, x1, y1, 10, 20);
+    GTriangle_drawFilled2(image, &pixel, x0, y0, x1, y1, y1, x0);
 }
 
 void render(Image* image)
@@ -33,10 +35,12 @@ void render(Image* image)
     //GLine_drawFromTo(image, &line, 450, 250, 450, 450);
     GCircle_draw(image, &blackPixel, 250, 250, 100);
 
+    GTriangle_drawFilled2(image, &blackPixel, 0,0, 100,400, 300,300);
+
     line.currentPoint.x = 0; line.currentPoint.y = 0;
     HilbertCurve_drawLine(image, &line, 0, 0, 500, 0, 0, 500, 3);
 
-    HilbertCurve_visit(drawCircle, image, 0, 0, 500, 0, 0, 500, 3);
+    HilbertCurve_visit(drawSomething, image, 0, 0, 500, 0, 0, 500, 3);
 }
 
 int main(int argc, char* argv[])

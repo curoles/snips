@@ -14,7 +14,6 @@ GPoint;
 typedef struct GLine
 {
     GPoint currentPoint;
-    size_t width;
     Pixel pxl;
 }
 GLine;
@@ -28,18 +27,20 @@ void GLine_drawTo(
 static inline
 void GLine_drawFromTo(
     Image* image,
-    GLine* line,
+    Pixel* pixel,
     int x_from, int y_from, int x_to, int y_to
 )
 {
-    line->currentPoint.x = x_from;
-    line->currentPoint.y = y_from;
-    GLine_drawTo(image, line, x_to, y_to);
+    GLine line;
+    line.currentPoint.x = x_from;
+    line.currentPoint.y = y_from;
+    line.pxl = *pixel;
+    GLine_drawTo(image, &line, x_to, y_to);
 }
 
 static inline
-void GLine_drawFromTo2(Image* image, GLine* line, GPoint begin, GPoint end) {
-    GLine_drawFromTo(image, line, begin.x, begin.y, end.x, end.y);
+void GLine_drawFromTo2(Image* image, Pixel* pixel, GPoint begin, GPoint end) {
+    GLine_drawFromTo(image, pixel, begin.x, begin.y, end.x, end.y);
 }
 
 static inline

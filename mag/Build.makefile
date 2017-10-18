@@ -1,4 +1,4 @@
-SRC_FILES := main.c write_to_tiff.c image.c draw.c
+SRC_FILES := main.c write_to_tiff.c image.c draw.c draw_triangle.c
 SRC_FILES += hilbert.c
 
 SRC_FILES := $(addprefix $(SOURCE_PATH)/,$(SRC_FILES))
