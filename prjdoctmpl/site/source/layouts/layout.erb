@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Use the title from a page's frontmatter if it has one -->
+    <title><%= current_page.data.title || "Middleman" %></title>
+    <!--%= stylesheet_link_tag "site" %-->
+    <%= stylesheet_link_tag(bootstrap_css scheme: 'https') %>
+    <%= stylesheet_link_tag(font_awesome_css scheme: 'https') %>
+    <%= javascript_include_tag "site" %>
+  </head>
+  <body>
+
+
+<%= panel 'You accepted the Terms of service.', title: 'Congratulations' %>
+
+<% navbar do %>
+  <% vertical do %>
+    <!--%= link_to 'Home', '/index.html' %-->
+  <% end %>
+  <% horizontal do %>
+    <% nav class: 'navbar-right' do %>
+      <!--%= link_to 'Profile', '/index.html' %-->
+      <!--%= link_to 'Settings', '/index.html' %-->
+    <% end %>
+  <% end %>
+<% end %>
+
+    <%= yield %>
+  </body>
+</html>
