@@ -1,0 +1,69 @@
+---
+layout: remark_presentation
+title: "Presentations"
+---
+
+class: center, middle
+
+# In-Browser Slide Presentations
+
+Press C to clone a display; then press P to switch to presenter mode.
+
+<!--.footnote[.blue.bold[*] by Igor Lesik]-->
+
+???
+some note
+
+---
+
+# Types of in-browser slideshows
+
+1. [Remark](https://github.com/gnab/remark)
+2. [Reveals.js](https://github.com/hakimel/reveal.js/)
+
+Use correspoding _front matters_:
+```yaml
+---
+layout: remark_presentation|reveal_presentation
+title: "Remark presentation"|"Reveal presentation"
+---
+```
+
+See slide [remark](#remark) and slide [reveal](#reveal)
+
+---
+name: remark
+
+# Remark
+
+Place this _front YAML matters_ at the top of a page to use proper _layout_:
+```yaml
+---
+layout: remark_presentation
+title: "Remark presentation"
+---
+
+<BODY as Markdown>
+
+```
+
+[Presentation about Remark made with Remark](https://remarkjs.com)
+
+[Remark Markdown Wiki](https://github.com/gnab/remark/wiki/Markdown)
+
+---
+
+# Mermaid with Remark
+
+<div class="mermaid" id="diagram1">
+graph TD
+    Start --> Stop
+</div>
+
+<!--https://github.com/gnab/remark/wiki/Adding-graphs-via-Mermaid-->
+
+---
+name: reveal
+
+# Reveal.js
+

@@ -1,3 +1,5 @@
+set :strip_index_file, false
+
 # Activate and configure extensions
 # https://middlemanapp.com/advanced/configuration/#configuring-extensions
 

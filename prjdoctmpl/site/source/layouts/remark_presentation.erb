@@ -22,8 +22,14 @@
 <%= yield %>
 
     </textarea>
+
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
     </script>
+
+    <script src="https://cdn.rawgit.com/knsv/mermaid/7.0.0/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.rawgit.com/knsv/mermaid/7.0.0/dist/mermaid.css">
+    <script>mermaid.initialize({startOnLoad:true});</script>
+
     <script>
       var slideshow = remark.create();
     </script>
