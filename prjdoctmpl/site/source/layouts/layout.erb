@@ -1,5 +1,5 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -11,30 +11,37 @@
     <%= stylesheet_link_tag(bootstrap_css scheme: 'https') %>
     <%= stylesheet_link_tag(font_awesome_css scheme: 'https') %>
     <%= javascript_include_tag "site" %>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </head>
   <body>
 
+    <!-- Bootstrap also requires a containing element to wrap site contents. -->
+    <div class="container-fluid" style="text-align:left">
 
-
-<% navbar do %>
+<!-- see http://fullscreen.github.io/bh/#navbars -->
+<% navbar position: :top,  inverted: false do %>
   <% vertical do %>
-    <a href="/index.html">Home</a> <!--%= link_to 'Home', '/index.html' %-->
+    <a href="/index.html" class="navbar-brand">Home</a>
+    <!--%= link_to 'Home2', '/index.html' %-->
   <% end %>
   <% horizontal do %>
     <% nav class: 'navbar-right' do %>
       <!--%= link_to 'Presentations', '/pages/presentations/index.html' %-->
-      <a href="/pages/wiki/index.html">Wiki</a>
-      <a href="/pages/mail/index.html">Mail</a>
-      <a href="/pages/presentations/index.html">Presentations</a>
-      <a href="/pages/dictionary/index.html">Dictionary</a>
-      <a href="/pages/blog/index.html">Blog</a>
-      <a href="/pages/bugs/index.html">Bugs</a>
-      <a href="/pages/review/index.html">Code review</a>
-      <a href="/pages/code/index.html">Code doc</a>
+      <li><a href="/pages/wiki/index.html">Wiki</a></li>
+      <li><a href="/pages/mail/index.html">Mail</a></li>
+      <li><a href="/pages/presentations/index.html">Presentations</a></li>
+      <li><a href="/pages/dictionary/index.html">Dictionary</a></li>
+      <li><a href="/pages/blog/index.html">Blog</a></li>
+      <li><a href="/pages/bugs/index.html">Bugs</a></li>
+      <li><a href="/pages/review/index.html">Code review</a></li>
+      <li><a href="/pages/code/index.html">Code doc</a></li>
     <% end %>
   <% end %>
 <% end %>
 
     <%= yield %>
+
+    </div>
+
   </body>
 </html>
