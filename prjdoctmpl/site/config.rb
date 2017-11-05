@@ -1,4 +1,7 @@
+# @igor Do not strip index.html from path.
 set :strip_index_file, false
+
+ignore '**/*.swp' # @igor ignore VIM temporary files
 
 # Activate and configure extensions
 # https://middlemanapp.com/advanced/configuration/#configuring-extensions

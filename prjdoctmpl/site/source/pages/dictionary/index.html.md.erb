@@ -1,7 +1,19 @@
+---
+title: Dictionary Index 
+---
 # Index
 
-<% pd=sitemap.find_resource_by_path('/pages/dictionary/b/BKM.html').data %>
-<abbr title="<%= pd.description %>"><%= pd.title %></abbr>
+<!--http://www.rubydoc.info/github/middleman/middleman/Middleman/Sitemap-->
+<% dict_path = 'pages/dictionary/' %>
+<% pages = sitemap.resources.select {|resource| resource.path.start_with?(dict_path)} %>
+<% pages = pages.select{|resource| !resource.directory_index?}.sort_by {|x| x.data.title} %>
+<% last_initial = nil %>
+<% pages.each do |page| %>
+<% initial = page.data.title[0,1].upcase %>
+<% if initial != last_initial %>
+<hr><h2><%=initial%></h2><hr>
+<% end %>
+<%= link_to page.data.title, '/'+page.path, relative: false %> - <%=page.data.description%><br>
+<% last_initial = initial %>
+<% end %>
 
-https://forum.middlemanapp.com/t/list-all-pages-with-certain-yaml-tag/861/4
-https://middlemanapp.com/advanced/sitemap/

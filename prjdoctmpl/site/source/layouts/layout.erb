@@ -9,9 +9,17 @@
     <title><%= current_page.data.title || "Documentation" %></title>
     <%= stylesheet_link_tag "site" %>
     <%= stylesheet_link_tag(bootstrap_css scheme: 'https') %>
+    <%= stylesheet_link_tag(bootstrap_theme_css scheme: 'https') %>
     <%= stylesheet_link_tag(font_awesome_css scheme: 'https') %>
+    <%= javascript_include_tag bootstrap_js %>
     <%= javascript_include_tag "site" %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('a[href="' + this.location.pathname + '"]').parent().addClass('active');
+});
+</script>
+
   </head>
   <body>
 
@@ -28,9 +36,9 @@
     <% nav class: 'navbar-right' do %>
       <!--%= link_to 'Presentations', '/pages/presentations/index.html' %-->
       <li><a href="/pages/wiki/index.html">Wiki</a></li>
+      <li><a href="/pages/dictionary/index.html">Dictionary</a></li>
       <li><a href="/pages/mail/index.html">Mail</a></li>
       <li><a href="/pages/presentations/index.html">Presentations</a></li>
-      <li><a href="/pages/dictionary/index.html">Dictionary</a></li>
       <li><a href="/pages/blog/index.html">Blog</a></li>
       <li><a href="/pages/bugs/index.html">Bugs</a></li>
       <li><a href="/pages/review/index.html">Code review</a></li>
