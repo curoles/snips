@@ -10,6 +10,25 @@ activate :autoprefixer do |prefix|
   prefix.browsers = "last 2 versions"
 end
 
+activate :blog do |blog|
+  blog.prefix = "pages/blog"
+  blog.sources = "{category}/{year}/{user}/{year}-{month}-{day}-{title}.html"
+  blog.permalink = "{category}/{year}/{month}/{day}/{user}-{title}.html"
+end
+
+# Activate middleman-syntax and enable line numbers.
+# Note line numbers can be disabled on a per block basis
+# e.g. ```ruby?line_numbers=false
+activate :syntax, :line_numbers => true
+# Use redcarpet as the markdown engine.
+set :markdown_engine, :redcarpet # default is :kramdown
+# configure redcarpet to use github style fenced code blocks
+# (tripe back ticks ```) to denote code
+set :markdown, :fenced_code_blocks => true, :smartypants => true
+# if you are using haml there can be issues with
+# automatic indentations, turning this off can help
+set :haml, { ugly: true }
+
 # Layouts
 # https://middlemanapp.com/basics/layouts/
 

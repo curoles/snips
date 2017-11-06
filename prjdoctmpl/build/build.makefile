@@ -12,3 +12,12 @@ build_site: build_opts=--clean --verbose --build-dir=$(BUILD_DIR)/website
 build_site:
 	cd $(SOURCE_PATH)/site && NO_CONTRACTS=true bundle exec middleman build $(build_opts)
 
+.PHONY: show_gems
+show_gems:
+	cd $(SOURCE_PATH)/site && bundle show
+	gem search ^middleman$$
+	gem search ^middleman-autoprefixer$$
+	gem search ^middleman-blog$$
+	gem search ^tzinfo-data$$
+	gem search ^wdm$$
+	gem search ^bh$$
