@@ -5,12 +5,16 @@
 all: build_site
 	@echo All done!
 
-#include $(SOURCE_PATH)/build/get_tools.makefile
+WEBSITE_DIR := $(BUILD_DIR)/website
 
 .PHONY: build_site
-build_site: build_opts=--clean --verbose --build-dir=$(BUILD_DIR)/website
+build_site: build_opts=--clean --verbose --build-dir=$(WEBSITE_DIR)
 build_site:
 	cd $(SOURCE_PATH)/site && NO_CONTRACTS=true bundle exec middleman build $(build_opts)
+
+.PHONY: run_py_server
+run_py_server:
+	cd $(WEBSITE_DIR) && python3 -m http.server
 
 .PHONY: show_gems
 show_gems:
