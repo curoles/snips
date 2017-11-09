@@ -1,0 +1,55 @@
+---
+
+title: Make Tickets
+date: 2017/11/08
+user: igor
+category: task
+status: open
+tags: priority-medium
+blog: tickets
+
+---
+
+# Make Tickets
+
+The idea is that Bug/Issue/Ticket Tracking system can be implemented as a blog.
+In this ticket I am trying to see if it can be actually implemented.
+
+First things I did:
+
+- made directory `pages/tickets`,
+- copied `pages/blog/index.html.erb` into `pages/tickets`,
+- created `lib/tickets_activator.rb` similar to `lib/blog_activator.rb`,
+- last thing was to give 2 blogs different names,
+  see [miltiple blogs](https://middlemanapp.com/basics/blogging/#multiple-blogs-in-a-single-site).
+
+```diff
+diff --git a/spdoc/site/lib/blog_activator.rb b/spdoc/site/lib/blog_activator.rb
+index bfb42fd..032a79a 100644
+--- a/spdoc/site/lib/blog_activator.rb
++++ b/spdoc/site/lib/blog_activator.rb
+@@ -2,6 +2,7 @@ module BlogActivator
+ 
+ def self.activate(cfg)
+ cfg.activate :blog do |blog|
++  blog.name = "blog"
+   blog.prefix = "pages/blog"
+   blog.layout = "blog/layout"
+   blog.sources = "{category}/{year}/{user}/{year}-{month}-{day}-{title}.html"
+diff --git a/spdoc/site/lib/tickets_activator.rb b/spdoc/site/lib/tickets_activator.rb
+index 5bb7eac..0471e1c 100644
+--- a/spdoc/site/lib/tickets_activator.rb
++++ b/spdoc/site/lib/tickets_activator.rb
+@@ -2,10 +2,11 @@ module TicketsActivator
+ 
+ def self.activate(cfg)
+ cfg.activate :blog do |blog|
+-  blog.prefix = "pages/tikets"
+-  blog.layout = "blog/layout"
++  blog.name = "tickets"
++  blog.prefix = "pages/tickets"
++  blog.layout = "tickets/layout"
+   blog.sources = "{category}/{year}/{user}/{year}-{month}-{day}-{title}.html"
+-  blog.permalink = "permalink/{category}/{year}/{month}/{day}/{user}-{title}.html"
++  blog.permalink = "permalink/{year}/{month}/{day}/{category}-{user}-{title}.html"
+```

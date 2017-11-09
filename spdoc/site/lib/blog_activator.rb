@@ -2,6 +2,7 @@ module BlogActivator
 
 def self.activate(cfg)
 cfg.activate :blog do |blog|
+  blog.name = "blog"
   blog.prefix = "pages/blog"
   blog.layout = "blog/layout"
   blog.sources = "{category}/{year}/{user}/{year}-{month}-{day}-{title}.html"
