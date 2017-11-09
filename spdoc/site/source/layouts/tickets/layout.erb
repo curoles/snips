@@ -17,13 +17,15 @@
     <div class="container" style="text-align:left">
 
     <table class="table table-bordered thead-dark">
-        <tr> <th>Status</th> <th>Category</th> <th>Creator</th> <th>Date</th> <th>Tags</th> </tr>
+        <tr> <th>Status</th> <th>Category</th> <th>Assignee</th>
+             <th>Tags</th> <th>Creator</th> <th>Date</th> </tr>
         <tr>
              <td><%= current_article.data.status %></td>
              <td><%= current_article.metadata[:page][:category] %></td>
+             <td><%= current_article.data.assignee || '?' %></td>
+             <td><%= current_article.tags || '?'%> </td>
              <td><%= current_article.metadata[:page][:user] %></td>
              <td><%= current_article.date.strftime('%b %e') %></td>
-             <td><%= current_article.tags %> </td>
          </tr>
     </table>
 

@@ -6,6 +6,7 @@ user: igor
 category: task
 status: open
 tags: priority-medium
+assignee: igor
 blog: tickets
 
 ---
@@ -52,4 +53,43 @@ index 5bb7eac..0471e1c 100644
    blog.sources = "{category}/{year}/{user}/{year}-{month}-{day}-{title}.html"
 -  blog.permalink = "permalink/{category}/{year}/{month}/{day}/{user}-{title}.html"
 +  blog.permalink = "permalink/{year}/{month}/{day}/{category}-{user}-{title}.html"
+```
+
+---
+2017-11-09
+
+## add field 'assignee'
+
+```diff
+diff --git a/spdoc/site/source/layouts/tickets/layout.erb b/spdoc/site/source/layouts/tickets/layout.erb
+index 6318e04..e9701a7 100644
+--- a/spdoc/site/source/layouts/tickets/layout.erb
++++ b/spdoc/site/source/layouts/tickets/layout.erb
+@@ -17,13 +17,15 @@
+     <div class="container" style="text-align:left">
+ 
+     <table class="table table-bordered thead-dark">
+-        <tr> <th>Status</th> <th>Category</th> <th>Creator</th> <th>Date</th> <th>Tags</th> </tr>
++        <tr> <th>Status</th> <th>Category</th> <th>Assignee</th>
++             <th>Tags</th> <th>Creator</th> <th>Date</th> </tr>
+         <tr>
+              <td><%= current_article.data.status %></td>
+              <td><%= current_article.metadata[:page][:category] %></td>
++             <td><%= current_article.data.assignee || '?' %></td>
++             <td><%= current_article.tags || '?'%> </td>
+              <td><%= current_article.metadata[:page][:user] %></td>
+              <td><%= current_article.date.strftime('%b %e') %></td>
+-             <td><%= current_article.tags %> </td>
+          </tr>
+     </table>
+ 
+diff --git a/spdoc/site/source/pages/tickets/task/2017/igor/2017-11-08-make_tickets.html.md.erb b/spdoc/site/source/pages/tickets/task/2017/igor/2017-11-08-make_tickets.html.md.erb
+index 8831c20..b3fd5e5 100644
+--- a/spdoc/site/source/pages/tickets/task/2017/igor/2017-11-08-make_tickets.html.md.erb
++++ b/spdoc/site/source/pages/tickets/task/2017/igor/2017-11-08-make_tickets.html.md.erb
+@@ -6,6 +6,7 @@ user: igor
+ category: task
+ status: open
+ tags: priority-medium
++assignee: igor
 ```
