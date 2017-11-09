@@ -5,7 +5,7 @@ date: 2017/11/08
 user: igor
 category: task
 status: open
-tags: priority-medium
+tags: priority-medium, tickets
 assignee: igor
 blog: tickets
 
@@ -73,16 +73,12 @@ index 6318e04..e9701a7 100644
 +        <tr> <th>Status</th> <th>Category</th> <th>Assignee</th>
 +             <th>Tags</th> <th>Creator</th> <th>Date</th> </tr>
          <tr>
-              <td><%= current_article.data.status %></td>
-              <td><%= current_article.metadata[:page][:category] %></td>
-+             <td><%= current_article.data.assignee || '?' %></td>
-+             <td><%= current_article.tags || '?'%> </td>
-              <td><%= current_article.metadata[:page][:user] %></td>
-              <td><%= current_article.date.strftime('%b %e') %></td>
--             <td><%= current_article.tags %> </td>
-          </tr>
-     </table>
- 
+              <td>< %= current_article.data.status %></td>
+              <td>< %= current_article.metadata[:page][:category] %></td>
++             <td>< %= current_article.data.assignee || '?' %></td>
++             <td>< %= current_article.tags || '?'%> </td>
+              <td>< %= current_article.metadata[:page][:user] %></td>
+              <td>< %= current_article.date.strftime('%b %e') %></td>
 diff --git a/spdoc/site/source/pages/tickets/task/2017/igor/2017-11-08-make_tickets.html.md.erb b/spdoc/site/source/pages/tickets/task/2017/igor/2017-11-08-make_tickets.html.md.erb
 index 8831c20..b3fd5e5 100644
 --- a/spdoc/site/source/pages/tickets/task/2017/igor/2017-11-08-make_tickets.html.md.erb
@@ -92,4 +88,5 @@ index 8831c20..b3fd5e5 100644
  status: open
  tags: priority-medium
 +assignee: igor
+ blog: tickets
 ```
