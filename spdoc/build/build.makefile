@@ -16,6 +16,10 @@ build_site:
 run_py_server:
 	cd $(WEBSITE_DIR) && python3 -m http.server
 
+.PHONY: api
+api:
+	yard doc $(SOURCE_PATH)/tools/**/*.rb -o $(WEBSITE_DIR)/pages/api
+
 .PHONY: show_gems
 show_gems:
 	cd $(SOURCE_PATH)/site && bundle show
