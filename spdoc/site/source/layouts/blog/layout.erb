@@ -20,7 +20,7 @@
       <%= yield %>
     </div>
 
-    <hr><span class="label label-danger">=== End Of Article ===</span><hr>
+    <!--hr><span class="label label-danger">===| End Of Article |===</span><hr-->
 
 <% if false%>
     <aside>
@@ -75,6 +75,26 @@
                 <ol>
                   <% blog.articles.group_by {|a| a.date.year }.each do |year, articles| %>
                     <li><%= link_to "#{year} (#{articles.size})", blog_year_path(year) %></li>
+                  <% end %>
+                </ol>
+            </div>
+         </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">By Author</div>
+            <div class="panel-body">
+                <ol>
+                  <% blog.articles.group_by {|a| a.metadata[:page][:user] }.each do |user, articles| %>
+                    <li><%="#{user} (#{articles.size})"%><!--%= link_to "#{user} (#{articles.size})", blog_year_path('2017') %--></li>
+                  <% end %>
+                </ol>
+            </div>
+         </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">By Category</div>
+            <div class="panel-body">
+                <ol>
+                  <% blog.articles.group_by {|a| a.metadata[:page][:category] }.each do |category, articles| %>
+                    <li><%="#{category} (#{articles.size})"%><!--%= link_to "#{user} (#{articles.size})", blog_year_path('2017') %--></li>
                   <% end %>
                 </ol>
             </div>

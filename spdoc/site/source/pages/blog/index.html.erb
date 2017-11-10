@@ -26,13 +26,14 @@ per_page: 10
 <% end %>
 
 <table class="table table-striped">
-    <tr> <th>#</th> <th>Title</th> <th>Date</th> <th>Author</th> <th>Category</th> </tr>
+    <tr> <th>#</th> <th>Title</th> <th>Date</th> <th>Author</th> <th>Category</th> <th>Tags</th> </tr>
 <% page_articles.each_with_index do |article, i| %>
     <tr> <td><%= i %></td> 
          <td><%= link_to article.title, article %></td>
          <td><%= article.date.strftime('%b %e') %></td>
          <td><%= article.metadata[:page][:user] %> </td>
          <td><%= article.metadata[:page][:category] %></td>
+         <td><%= article.data.tags || '' %></td>
      </tr>
 <% end %>
 </table>
