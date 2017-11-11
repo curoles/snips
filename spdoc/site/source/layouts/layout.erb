@@ -8,9 +8,9 @@
     <!-- Use the title from a page's frontmatter if it has one -->
     <title><%= current_page.data.title || "Documentation" %></title>
     <%= stylesheet_link_tag "site" %>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <%= partial "layouts/include_bootstrap" %>
     <%= javascript_include_tag "site" %>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
 $(document).ready(function() {
     $('a[href="' + this.location.pathname + '"]').parent().addClass('active');

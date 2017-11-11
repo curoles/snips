@@ -20,7 +20,8 @@
         <tr> <th>Status</th> <th>Category</th> <th>Assignee</th>
              <th>Tags</th> <th>Creator</th> <th>Date</th> </tr>
         <tr>
-             <td><%= current_article.data.status %></td>
+             <td><%= current_article.data.status%>
+                 <%= (current_article.data.progress || '?').to_s + '%' %></td>
              <td><%= current_article.metadata[:page][:category] %></td>
              <td><%= current_article.data.assignee || '?' %></td>
              <td><%= current_article.tags || '?'%> </td>
@@ -28,6 +29,21 @@
              <td><%= current_article.date.strftime('%b %e') %></td>
          </tr>
     </table>
+
+    <div class="progress">
+        <% progress=current_article.data.progress || 0 %>
+        <% progress_str="#{progress}%"; left_progress_str="#{100 - progress}%" %>
+        <div class="progress-bar progress-bar-success" role="progressbar"
+             aria-valuenow="<%="#{progress}" %>" aria-valuemin="0" aria-valuemax="100"
+             style="width:<%=progress_str%>">
+          <%= progress_str %>
+        </div>
+        <div class="progress-bar progress-bar-danger" role="progressbar"
+             aria-valuenow="<%="#{100 - progress}" %>" aria-valuemin="0" aria-valuemax="100"
+             style="width:<%=left_progress_str%>">
+          <%= left_progress_str %>
+        </div>
+    </div>
 
     <div id="main" role="main">
       <%= yield %>

@@ -1,0 +1,66 @@
+---
+
+title: Tickets
+blog: tickets
+pageable: false
+
+---
+
+<!--%= stylesheet_link_tag('cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css', options={:scheme => 'https'}) %-->
+<link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet"/>
+<%= javascript_include_tag "https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js" %>
+<script>
+$(document).ready(function() {
+    $('#tbl_tickets').DataTable();
+} );
+</script>
+
+<table id="tbl_tickets" class="display" width="100%" cellspacing="0">
+
+    <% headers = '
+    <tr> <th>#</th> <th>Title</th> <th>Status</th> <th>Progress</th> <th>Assignee</th>
+         <th>Creator</th> <th>Date</th><th>Category</th> <th>Tags</th> </tr>' %>
+
+    <thead><%=headers%></thead>
+    <tfoot><%=headers%></tfoot>
+
+<% page_articles.each_with_index do |article, i| %>
+    <tr> <td><%= i %></td> 
+         <td><%= link_to article.title, article %></td>
+         <td><%= article.data.status || '?' %></td>
+         <td><%= "#{article.data.progress || 0}%" %></td>
+         <td><%= article.data.assignee || '?' %></td>
+         <td><%= article.metadata[:page][:user] %> </td>
+         <td><%= article.date.strftime('%b %e') %></td>
+         <td><%= article.metadata[:page][:category] %></td>
+         <td><%= article.tags || '' %></td>
+     </tr>
+<% end %>
+</table>
+
+
+    <hr>
+    <aside>
+        <div class="panel panel-default">
+            <div class="panel-heading">Tags</div>
+            <div class="panel-body">
+               <ol>
+                 <% blog.tags.each do |tag, articles| %>
+                   <li><%= link_to "#{tag} (#{articles.size})", tag_path(tag) %></li>
+                 <% end %>
+               </ol>
+            </div>
+         </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">By Year</div>
+            <div class="panel-body">
+                <ol>
+                  <% blog.articles.group_by {|a| a.date.year }.each do |year, articles| %>
+                    <li><%= link_to "#{year} (#{articles.size})", blog_year_path(year) %></li>
+                  <% end %>
+                </ol>
+            </div>
+         </div>
+    </div>
+    </aside>
+
