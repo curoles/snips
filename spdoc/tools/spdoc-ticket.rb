@@ -5,7 +5,7 @@
 require 'fileutils'
 require 'etc'
 require 'date'
-
+require 'highline/import'
 
 module SPDoc
 
@@ -44,17 +44,17 @@ end
 class TicketTool
 
     class Ticket
-        attr_accessor :user, :category, :title, :date
+        attr_accessor :user, :category, :title, :date, :prefix
 
         def initialize
             @user = Etc.getlogin
             @category = 'task'
             @title = 'new_ticket'
             @date = Date.today
-        end
-
-        def prefix
-            'site/source/pages/tickets'
+            @prefix = File.join(File.dirname(__FILE__), '..','site','source','pages','tickets')
+            if not File.exist? @prefix then
+                raise ArgumentError, "Directory #{@prefix} does not exist"
+            end
         end
 
         def make_ticket_file
@@ -64,27 +64,26 @@ class TicketTool
         end
     end
 
-def ask_category(tkt)
-    tkt
-end
+    def ask_category(tkt)
+        tkt.category = ask("Category(task, bug and etc)?  ") { |q| q.default = "task" }
+        tkt
+    end
 
-def ask_year(tkt)
-    tkt
-end
 
-def ask_user_name(tkt)
-    tkt
-end
+    def ask_user_name(tkt)
+        tkt.user = ask("User?  ") { |q| q.default = Etc.getlogin }
+        tkt
+    end
 
-def ask_title(tkt)
-    tkt
-end
+    def ask_title(tkt)
+        tkt.title = ask("Title?  ") { |q| q.validate = /\A\S+\Z/ }
+        tkt
+    end
 
-def run
-    puts "HHi"
-    tkt = ask_title ask_user_name ask_year ask_category Ticket.new
-    tkt.make_ticket_file
-end
+    def run
+        tkt = ask_title ask_user_name ask_category Ticket.new
+        tkt.make_ticket_file
+    end
 
 end # class TicketTool
 
