@@ -1,0 +1,3 @@
+package test2
+
+val DBG : Bool = 2 * 3 * 4

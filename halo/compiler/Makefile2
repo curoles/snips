@@ -1,0 +1,213 @@
+
+CC  := gcc44
+CXX := g++44
+AR  := ar
+
+UNAME := $(shell whoami)
+
+SRC_DIR     := ./
+BUILD_DIR   := ./build
+
+REPO_ROOT := ../..
+
+# CODEC - encoding/decoding library
+CODEC_PATH     := $(REPO_ROOT)/codec
+CODEC_LIBS     := -lsmcodec
+CODEC_LIB_PATH := $(CODEC_PATH)/build
+CODEC_TBL_PATH := $(CODEC_LIB_PATH)/
+CODEC_LDFLAGS  := -L$(CODEC_LIB_PATH) $(CODEC_LIBS)
+CODEC_TARGET   := $(CODEC_LIB_PATH)/libsmcodec.a
+
+COSIM_PATH     := $(REPO_ROOT)/sim/cosim
+COSIM_LDFLAGS  := -L$(REPO_ROOT)/sim/cosim/build -lcosim
+TRACE_SERVICES_LDFLAGS := -L$(REPO_ROOT)/common/traceServices/build -ltraceServices
+
+QIOL_PATH      := $(REPO_ROOT)/sim/qiol/qemu
+
+TRACE_SERVICES_PATH := $(REPO_ROOT)/common/traceServices
+
+SRCS := main.cpp args.cpp sim.cpp cmdline.cpp machine.cpp simengine.cpp
+SRCS += debug.cpp config.cpp knobs.cpp loader.cpp bt.cpp
+SRCS += core.cpp memory.cpp ram.cpp phmem.cpp tlb.cpp mmio.cpp io.cpp
+SRCS += program.cpp executor.cpp uicmd.cpp uicmdwithparser.cpp smreg.cpp
+SRCS += cceval.cpp savepoint.cpp
+SRCS += syscall/syscall.cpp
+SRCS += services/tracedump.cpp services/codedump.cpp services/services.cpp services/codemarker.cpp
+SRCS += osystem.cpp clb.cpp statestream.cpp profile.cpp
+SRCS += shiftHelpers.cpp
+SRCS += symbols.cpp insnscache.cpp
+SRCS += gib_fetcher.cpp arm_tlb.cpp x86pgwalk.cpp htlb.cpp
+
+# pick all files/executors from directory exe/ 
+EXE_SRCS := $(wildcard exe/*.cpp)
+UIC_SRCS := $(wildcard ui/*.cpp)
+RSP_SRCS := $(wildcard rsp/*.cpp)
+SRCS += $(EXE_SRCS) $(UIC_SRCS) $(RSP_SRCS)
+
+OBJS := $(SRCS:.cpp=.o)
+
+FSIM_TARGET := $(BUILD_DIR)/smifs
+OBJS := $(addprefix $(BUILD_DIR)/,$(OBJS))
+OBJS += $(BUILD_DIR)/isa.exe.o
+
+ALL_OBJS := $(BUILD_DIR)/*.o $(BUILD_DIR)/exe/*.o $(BUILD_DIR)/ui/*.o
+ALL_OBJS += $(BUILD_DIR)/syscall/*.o
+ALL_OBJS += $(BUILD_DIR)/services/*.o
+ALL_OBJS += $(BUILD_DIR)/rsp/*.o
+
+INCLUDES :=  -I.
+# good gelf.h is there, but should not we use /usr/include ? 
+INCLUDES +=  -I/sw/tools/local/lib64/include
+INCLUDES +=  -I$(REPO_ROOT)/isa/v3/include -I../cosim -I ./build -I$(REPO_ROOT)/common
+
+CFLAGS := -m64 -D__STDC_FORMAT_MACROS $(INCLUDES)
+
+LDFLAGS := -L/sw/tools/local/lib64/lib
+
+# the boost people have cleverly used pthreads in libboost_regex but have
+# neglected to mention that little fact
+LDFLAGS += -lboost_regex -lpthread
+LDFLAGS += -lreadline -ltermcap -lrt -lelf -ldl 
+LDFLAGS += $(CODEC_LDFLAGS) $(COSIM_LDFLAGS) $(TRACE_SERVICES_LDFLAGS)
+LDFLAGS += -lboost_thread
+
+# add gcc debug flags if !release build
+ifeq ($(MAKECMDGOALS),release)
+CFLAGS += -O2 -DNDEBUG
+else
+  ifeq ($(MAKECMDGOALS),fast_release)
+  CFLAGS += -O3 -DNDEBUG -DFSIM_FAST
+  else
+  CFLAGS += -g -Wall
+  endif
+endif
+
+all: $(BUILD_DIR) $(FSIM_TARGET)
+	@echo "DONE!"
+
+release: all
+
+fast_release: all
+
+# header dependencies
+ifneq ($(MAKECMDGOALS),clean)
+-include Depends.make
+endif
+
+# update dependencies
+Depends.make: SRCS := $(SRCS) $(BUILD_DIR)/X/isa/isa.exe.cpp
+Depends.make: $(SRCS)
+	touch Depends.make
+	makedepend -Y -p$(BUILD_DIR)/ -f Depends.make $(SRCS) 2> /dev/null
+	rm -f Depends.make.bak
+
+# make build directory
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)/exe
+	mkdir -p $(BUILD_DIR)/ui
+	mkdir -p $(BUILD_DIR)/syscall
+	mkdir -p $(BUILD_DIR)/services
+	mkdir -p $(BUILD_DIR)/rsp
+	mkdir -p $(BUILD_DIR)/X/isa
+
+# compile
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CXX) -c $(CFLAGS) -o $@ $<
+
+# link
+$(FSIM_TARGET): isa $(OBJS) $(CODEC_TARGET)
+	$(CXX) $(CFLAGS) -o $@ $(ALL_OBJS) $(LDFLAGS) -Wl,-rpath,/sw/tools/local/lib64/lib
+
+$(BUILD_DIR)/main.o:             CFLAGS := $(CFLAGS) -I$(QIOL_PATH)
+$(BUILD_DIR)/memory.o:           CFLAGS := $(CFLAGS) -I$(QIOL_PATH)
+$(BUILD_DIR)/io.o:           CFLAGS := $(CFLAGS) -I$(QIOL_PATH)
+$(BUILD_DIR)/sim.o:              CFLAGS := $(CFLAGS) -I$(CODEC_PATH)/src
+$(BUILD_DIR)/machine.o:          CFLAGS := $(CFLAGS) -I$(CODEC_PATH)/src
+$(BUILD_DIR)/cmdline.o:          CFLAGS := $(CFLAGS) -I$(CODEC_PATH)/src
+$(BUILD_DIR)/loader.o:           CFLAGS := $(CFLAGS) -I$(CODEC_PATH)/src
+$(BUILD_DIR)/uicmdwithparser.o:  CFLAGS := $(CFLAGS) -I$(CODEC_PATH)/src
+$(BUILD_DIR)/ui/print.o:         CFLAGS := $(CFLAGS) -I$(CODEC_PATH)/src
+$(BUILD_DIR)/ui/list.o:          CFLAGS := $(CFLAGS) -I$(CODEC_PATH)/src
+$(BUILD_DIR)/ui/qiol_cmd.o:      CFLAGS := $(CFLAGS) -I$(QIOL_PATH)
+$(BUILD_DIR)/profile.o:          CFLAGS := $(CFLAGS) -I$(CODEC_PATH)/src
+$(BUILD_DIR)/insnscache.o:       CFLAGS := $(CFLAGS) -I$(CODEC_PATH)/src
+$(BUILD_DIR)/executor.o:         CFLAGS := $(CFLAGS) -I$(CODEC_TBL_PATH) -I$(CODEC_PATH)/src
+$(BUILD_DIR)/core.o:             CFLAGS := $(CFLAGS) -I$(CODEC_TBL_PATH) -I$(CODEC_PATH)/src -I$(REPO_ROOT)/export
+$(BUILD_DIR)/exe/%.o:            CFLAGS := $(CFLAGS) -I$(CODEC_TBL_PATH) -I$(CODEC_PATH)/src
+$(BUILD_DIR)/isa.exe.o:          CFLAGS := $(CFLAGS) -I$(CODEC_TBL_PATH) -I$(CODEC_PATH)/src
+$(BUILD_DIR)/loader.o:           CFLAGS := $(CFLAGS) -I$(REPO_ROOT)/export
+$(BUILD_DIR)/program.o:          CFLAGS := $(CFLAGS) -I$(REPO_ROOT)/export -I$(CODEC_PATH)/src
+$(BUILD_DIR)/bt.o:               CFLAGS := $(CFLAGS) -I$(REPO_ROOT)/export
+$(BUILD_DIR)/ui/bttrace.o:       CFLAGS := $(CFLAGS) -I$(REPO_ROOT)/export
+$(BUILD_DIR)/rsp/sim_api.o:      CFLAGS := $(CFLAGS) -I$(CODEC_PATH)/src
+
+$(BUILD_DIR)/services/codedump.o:   CFLAGS := $(CFLAGS) -I$(CODEC_PATH)/src -I$(REPO_ROOT)/export
+$(BUILD_DIR)/services/tracedump.o:  CFLAGS := $(CFLAGS) -I$(CODEC_PATH)/src -I$(REPO_ROOT)/export
+$(BUILD_DIR)/services/services.o:   CFLAGS := $(CFLAGS) -I$(CODEC_PATH)/src -I$(REPO_ROOT)/export
+$(BUILD_DIR)/services/codemarker.o: CFLAGS := $(CFLAGS) -I$(CODEC_PATH)/src -I$(REPO_ROOT)/export
+
+# build Codec library
+$(CODEC_TARGET):
+	make -C $(CODEC_PATH)
+
+# clean all products
+clean:
+	rm -rf $(BUILD_DIR)
+	rm -f Depends.make
+	rm -f tags
+	rm -f cscope.*
+
+# generate tags
+tags:
+	ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .
+
+cscope:
+	rm -f cscope.*
+	find ./ -name '*.[ch]' -print > cscope.files
+	find ./ -name '*.[ch]pp' -print >> cscope.files
+	cscope -b
+
+# generate documentation
+doc:
+	mkdir -p $(BUILD_DIR)/doxy
+	doxygen Doxyfile
+
+# show doc front page in html
+seedoc:
+	firefox build/doxy/html/index.html &
+
+# build and run basic instruction tests
+test:
+	(cd test/ && ./run.sh)
+
+# update all involved components
+update:
+	svn update ./ ../../isa ../../codec ../../tests ../cosim ../qiol ../../export ../../common/traceServices
+	make -C $(CODEC_PATH) clean
+	make -C $(CODEC_PATH)
+	make -C $(COSIM_PATH) clean
+	make -C $(COSIM_PATH)
+	make -C $(TRACE_SERVICES_PATH) clean
+	make -C $(TRACE_SERVICES_PATH)
+	make clean
+	make
+
+# auto generated man pages
+$(BUILD_DIR)/X/isa/isa.exe.cpp: ../../isa/v3/insn/*.insn
+	(cd ../../isa/v3/ && ./gendoc.sh)
+	(cat $(BUILD_DIR)/X/isa/isa.man.cpp >> $(BUILD_DIR)/X/isa/isa.exe.cpp)
+
+isa_cpp: $(BUILD_DIR) ../../isa/v3/insn/*.insn
+	(cd ../../isa/v3/ && ./gendoc.sh)
+	(cat $(BUILD_DIR)/X/isa/isa.man.cpp >> $(BUILD_DIR)/X/isa/isa.exe.cpp)
+	
+$(BUILD_DIR)/isa.exe.o: $(BUILD_DIR)/X/isa/isa.exe.cpp
+	$(CXX) -c $(CFLAGS) -o $@ $(BUILD_DIR)/X/isa/isa.exe.cpp
+
+$(BUILD_DIR)/X/isa/smsysreg.h: ../../isa/v3/src/smsysreg.xml
+	../../isa/v3/scripts/sysreggen.py ../../isa/v3/src/smsysreg.xml $(BUILD_DIR)/X/isa/smsysreg
+
+isa: $(BUILD_DIR)/X/isa/smsysreg.h
+
+.PHONY: all clean release fast_release doc seedoc tags cscope test update isa
+
