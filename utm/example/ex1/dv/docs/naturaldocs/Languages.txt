@@ -1,0 +1,14 @@
+Format: 1.51
+
+Language: SystemVerilog
+
+   Extensions: sv svh
+   Line Comment: //
+   Block Comment: /* */
+   Package Separator: ::
+   Enum Values: Global
+   Class Prototype Ender: ;
+   Function Prototype Ender: ;
+   Variable Prototype Ender: ;
+   Line Extender: \
+

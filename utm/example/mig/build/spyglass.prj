@@ -1,0 +1,41 @@
+##Data Import Section
+set SG_TOP SMI_BLOCK
+read_file -type sourcelist $::env(SOURCE_DIR)/rtl/flist
+#read_file -type waiver ${SG_TOP}.swl
+
+##Common Options Section
+#Set top level module for analysis
+set_option top MigCpu
+
+#results and working directory for run
+set_option projectwdir MigCpuSpyglassResults
+
+#Sets design read options (no flattening, no synthesis)
+set_option designread_enable_synthesis yes
+set_option designread_disable_flatten no
+
+#Enables SystemVerilog for synthesis
+#set_option enableSV yes
+set_option enableSV09 yes
+
+#Sets the default waiver file for saving any waivers in the UI to
+#set_option default_waiver_file ${SG_TOP}.swl
+
+#Disables Save Restore
+set_option enable_save_restore no
+
+#Dashboard and reporting Setup
+set_option report { dashboard summary moresimple }
+
+#set_option aggregate_report { dashboard }
+#set_option aggregate_reportdir /home/ssmith/temp
+#set_option aggregate_report_config_file ./dashboard_report.cfg
+
+#Specifies the root methodology dir
+#set_option current_methodology $::env(VIEW)/rtl/mpcore/core/common/tools/spyglass/goals/rtl_handoff
+
+current_goal lint/lint_rtl
+#  set_option addrule { }
+#  set_option ignorerule {}
+#current_goal none
+

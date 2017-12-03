@@ -1,0 +1,7 @@
++incdir+$SOURCE_DIR/rtl
+$SOURCE_DIR/rtl/stdtype.sv
+$SOURCE_DIR/rtl/Helpers.sv
+$SOURCE_DIR/rtl/Dff.v
+$SOURCE_DIR/rtl/CpuParams.v
+$SOURCE_DIR/rtl/ifu/IFU.v
+$SOURCE_DIR/rtl/MigCpu.v

@@ -1,0 +1,26 @@
+Format: 1.51
+
+Topic Type: Module
+
+   Plural: Modules
+   Scope: Start
+   Class Hierarchy: Yes
+   Page Title If First: Yes
+   Can Group With: Classes, Interfaces
+
+   Keywords:
+      module, modules
+
+
+Topic Type: Package
+
+   Plural: Packages
+   Scope: Start
+   Class Hierarchy: Yes
+   Page Title If First: Yes
+   Can Group With: Interfaces, Classes
+
+   Keywords:
+      package, packages
+
+
