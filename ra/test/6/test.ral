@@ -1,0 +1,12 @@
+def prog
+[:do,
+  [:defun,:myputs,[:arg0, :arg1],[:do,[:puts,:arg0],[:puts,:arg1]]],
+  [:defun, :main, [],
+    [:do,
+      [:let, [:i]],
+      [:myputs,"Demonstrating argument ", "passing"],
+      [:return, 0]
+    ]
+  ]
+]
+end

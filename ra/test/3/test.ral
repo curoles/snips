@@ -1,0 +1,4 @@
+def prog
+[:printf,"'hello world' takes %ld bytes, exactly %ld\\n",
+[:strlen, "hello world"], [:strlen, "hello world"]]
+end

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+REL_PATH="${BASH_SOURCE[0]%/*}"
+source $REL_PATH/../run_simple_test.bash
+

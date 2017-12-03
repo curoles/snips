@@ -1,0 +1,14 @@
+def prog
+[:do,
+  [:defun, :say_hello, [], [:puts, "Hello "]],
+  [:defun, :main, [],
+    [:do,
+      [:say_hello, ""],
+      [:puts, "world"],
+      [:printf,"'hello world' takes %ld bytes\\n",[:strlen, "hello world"]],
+      [:printf,"The above should show _%ld_ bytes\\n",11],
+      [:return, 0]
+    ]
+  ]
+]
+end

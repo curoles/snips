@@ -1,0 +1,20 @@
+def prog
+[:do,
+  [:defun, :say_hello, [], [:puts, "Hello "]],
+  [:defun, :main, [],
+    [:do,
+      [:say_hello, ""],
+      [:if, [:strlen,""],
+        [:puts, "IF: The string was not empty"],
+        [:puts, "ELSE: The string was empty"]
+      ],
+      [:if, [:strlen,"Test"],
+        [:puts, "Second IF: The string was not empty"],
+        [:puts, "Second IF: The string was empty"]
+      ],
+      [:call, [:lambda, [], [:puts, "Done"]], [] ],
+      [:return, 0]
+    ]
+  ]
+]
+end

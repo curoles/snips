@@ -1,0 +1,3 @@
+def prog
+[:do, [:printf,"Hello"], [:printf," "], [:printf,"World\\n"] ]
+end
