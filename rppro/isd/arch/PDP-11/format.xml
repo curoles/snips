@@ -1,0 +1,55 @@
+<formats>
+
+  <name>PDP_11</name>
+
+  <def><name>addr</name>
+     <size>6</size>
+     <f> <name>reg</name>  <begin>0</begin> <end>2</end> </f>
+     <f> <name>mode</name> <begin>3</begin> <end>5</end> </f>
+  </def>
+
+  <def><name>B</name>
+     <begin>15</begin> <end>15</end>
+  </def>
+
+  <group> <name>0_oprnd</name> <size>16</size>
+    <f> <name>op0</name> <begin>11</begin> <end>14</end> <val>b0000</val> <color>#bbffbb</color> </f>
+
+    <format> <name>sys</name>
+      <f> <name>fix</name> <begin>15</begin> <end>15</end> <val>b0</val> <color>#bbffbb</color> </f>
+      <f> <name>fixop</name> <begin>8</begin> <end>10</end> <val>b000</val> <color>#bbffbb</color> </f>
+      <f> <name>opcode</name>  <begin>0</begin> <end>7</end> <color>#ccffcc</color> </f>
+    </format>
+
+    <format> <name>branch</name>
+      <f> <name>op1</name>  <begin>15</begin> <end>15</end> <color>#ccffcc</color> </f>
+      <f> <name>op2</name>  <begin>8</begin> <end>10</end> <color>#ccffcc</color> </f>
+      <f> <name>offset</name>  <begin>0</begin> <end>7</end> <color>#ccccff</color> </f>
+    </format>
+
+  </group>
+
+  <format> <name>1_oprnd</name>
+    <f> <name>fixop</name> <begin>11</begin> <end>14</end> <val>b0001</val> <color>#bbffbb</color> </f>
+
+    <f> <name>addr</name>   <begin>0</begin> <end>5</end>  <is>addr</is> <color>#ccccff</color> </f>
+    <f> <name>opcode</name> <begin>6</begin> <end>10</end> <color>#ccffcc</color> </f>
+    <f> <name>B</name>      <begin>15</begin> <end>15</end> <is>B</is> <color>#eeeeaa</color> </f>
+  </format>
+
+  <format> <name>1h_oprnd</name>
+    <f> <name>fixop</name> <begin>12</begin> <end>15</end> <val>b0111</val> <color>#bbffbb</color> </f>
+
+    <f> <name>addr</name>   <begin>0</begin> <end>5</end>  <is>addr</is>    <color>#ccccff</color> </f>
+    <f> <name>reg</name>    <begin>6</begin> <end>8</end>                   <color>#ccccff</color> </f>
+    <f> <name>opcode</name> <begin>9</begin> <end>11</end>                  <color>#ccffcc</color> </f>
+  </format>
+
+  <format> <name>2_oprnd</name>
+    <f> <name>dest</name>   <begin>0</begin> <end>5</end>  <is>addr</is> <color>#ccccff</color> </f>
+    <f> <name>src</name>    <begin>6</begin> <end>11</end>  <is>addr</is> <color>#ccccff</color> </f>
+    <f> <name>opcode</name> <begin>12</begin> <end>14</end> <color>#ccffcc</color> </f>
+    <f> <name>B</name>      <begin>15</begin> <end>15</end> <is>B</is> <color>#eeeeaa</color> </f>
+  </format>
+
+</formats>

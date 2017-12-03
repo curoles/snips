@@ -1,0 +1,55 @@
+<insns>
+
+<insn>
+  <mn>BR</mn>
+  <name>Branch</name>
+  <format>branch</format>
+  <decode>
+    <op1>b0</op1> <op2>b001</op2>
+  </decode>
+</insn>
+
+<insn>
+  <mn>BNE</mn>
+  <name>Branch on not equal</name>
+  <format>branch</format>
+  <decode>
+    <op1>b0</op1> <op2>b010</op2>
+  </decode>
+</insn>
+
+<insn>
+  <mn>BEQ</mn>
+  <name>Branch on equal</name>
+  <format>branch</format>
+  <decode>
+    <op1>b0</op1> <op2>b011</op2>
+  </decode>
+</insn>
+
+<insn>
+  <mn>BPL</mn>
+  <name>Branch on plus</name>
+  <format>branch</format>
+  <decode>
+    <op1>b1</op1> <op2>b000</op2>
+  </decode>
+</insn>
+
+<!--
+BMI Branch on minus 10000001 N = 1
+BVC Branch on overflow clear 10000100 V = 0
+BVS Branch on overflow set 10000101 V = 1
+BHIS Branch on higher than or same as 10000110 C = 0
+BCC Branch on carry clear 10000110 C = 0
+BLO Branch on lower 10000111 C = 1
+BCS Branch on carry set 10000111 C = 1
+BGE Branch on greater than or equal to 00000100 N Å V = 0
+BLT Branch on less than 00000101 N Å V = 1
+BGT Branch on greater than 00000110 Z Ú (N Å V) = 0
+BLE Branch on less than or equal to 00000111 Z Ú (N Å V) = 1
+BHI Branch on higher than 10000010 C Ú Z = 0
+BLOS Branch on lower than or same as 10000011 C Ú Z = 1
+-->
+
+</insns>
