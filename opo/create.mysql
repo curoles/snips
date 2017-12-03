@@ -1,0 +1,214 @@
+#@brief  Script to create PO MySQL DB
+#@author Igor Lesik 2013
+#
+# mysql -t --user=igor < create.mysql
+
+system echo 'MySQL version:';
+SELECT VERSION();
+
+system echo 'List of existing DBs:'
+SHOW DATABASES;
+
+SET @db_name='podb';
+SELECT @db_name AS 'PO DB name will be:';
+
+SELECT USER();
+SELECT CURRENT_USER();
+
+SHOW GRANTS FOR 'igor'@'localhost';
+
+DROP DATABASE IF EXISTS podb;
+CREATE DATABASE IF NOT EXISTS podb;
+USE podb;
+
+################################## dbinfo #####################################
+
+CREATE TABLE dbinfo (
+  version_major     INT UNSIGNED NOT NULL COMMENT 'DB/API major version',
+  version_minor     INT UNSIGNED NOT NULL COMMENT 'DB/API minor version',
+  date_created      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+  COMMENT = 'dbinfo - details about this DB'
+;
+
+INSERT INTO dbinfo (version_major, version_minor) VALUES
+  (1,1);
+
+system echo 'dbinfo table:';
+DESCRIBE dbinfo;
+SELECT * FROM dbinfo;
+
+################################## person #####################################
+
+CREATE TABLE person (
+  id           INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
+  first_name   CHAR(64) NOT NULL COMMENT 'person first name',
+  last_name    CHAR(64) NOT NULL COMMENT 'person last name',
+  current      ENUM('YES','NO') NOT NULL DEFAULT 'YES' COMMENT 'currently employed',
+  phone        CHAR(32),
+  email        CHAR(64)
+)
+  COMMENT = 'person - company employee'
+;
+
+system echo 'person table:';
+DESCRIBE person;
+
+################################# project #####################################
+
+CREATE TABLE project (
+  id           INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
+  name         CHAR(64) NOT NULL COMMENT 'department name',
+  manager      INT UNSIGNED, FOREIGN KEY(manager) REFERENCES person(id)
+)
+  COMMENT = 'project - department that requested purchase'
+;
+
+system echo 'project table:';
+DESCRIBE project;
+
+################################## source #####################################
+
+CREATE TABLE source (
+  id           INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
+  name         CHAR(128) NOT NULL COMMENT 'shop name',
+  address      CHAR(255),
+  contacts     CHAR(255)
+)
+  COMMENT = 'source - shop you buy item(s) from'
+;
+
+system echo 'source table:';
+DESCRIBE source;
+
+
+################################ item_type ####################################
+
+CREATE TABLE item_type (
+  id           INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
+  name         CHAR(255) NOT NULL COMMENT 'item/product name/category',
+  description  CHAR(255) COMMENT 'description',
+  asset        ENUM('ASSET','EXPENSE','TRAVEL_EXPENSE') NOT NULL DEFAULT 'EXPENSE'
+)
+  COMMENT = 'item type - type of thing you buy'
+;
+
+system echo 'item_type table:';
+DESCRIBE item_type;
+
+
+################################### item ######################################
+
+CREATE TABLE item (
+  id           INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
+  type_id      INT UNSIGNED NOT NULL, FOREIGN KEY(type_id) REFERENCES item_type(id),
+  source_id    INT UNSIGNED NOT NULL, FOREIGN KEY(source_id) REFERENCES source(id),
+  price        DOUBLE,
+  product_id   CHAR(128),
+  notes        TEXT
+)
+  COMMENT = 'source item - item from certain source'
+;
+
+system echo 'item table:';
+DESCRIBE item;
+
+#################################### pr #######################################
+
+CREATE TABLE pr (
+  id           INT UNSIGNED NOT NULL AUTO_INCREMENT, PRIMARY KEY (id),
+  date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  date_due     DATE,
+  id_string    VARCHAR(64),
+  orderer      INT UNSIGNED, FOREIGN KEY(orderer) REFERENCES person(id),
+  project      INT UNSIGNED, FOREIGN KEY(project) REFERENCES project(id),
+  source       INT UNSIGNED, FOREIGN KEY(source) REFERENCES source(id),
+  price        DOUBLE UNSIGNED, #currency ?
+  tax          DOUBLE UNSIGNED,
+  shipping     DOUBLE UNSIGNED,
+  total        DOUBLE UNSIGNED,
+  notes        TEXT
+);
+
+DESCRIBE pr;
+
+############################## payment_type ###################################
+
+CREATE TABLE payment_type (
+  id           INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
+  name         CHAR(128),
+  notes        TEXT
+)
+  COMMENT = 'payment type - type of payment: credit_card/check'
+;
+
+system echo 'payment_type table:';
+DESCRIBE payment_type;
+
+############################## order_type #####################################
+
+CREATE TABLE order_type (
+  id           INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
+  name         CHAR(32),
+  notes        TEXT
+)
+  COMMENT = 'order type - online/...'
+;
+
+system echo 'order_type table:';
+DESCRIBE order_type;
+
+INSERT INTO order_type (name, notes) VALUES
+  ('regular',''), ('online', 'Internet online purchase');
+
+#################################### po #######################################
+
+CREATE TABLE po (
+  id           INT UNSIGNED, PRIMARY KEY (id),  FOREIGN KEY(id) REFERENCES pr(id),
+  date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  approver     INT UNSIGNED NOT NULL, FOREIGN KEY(approver) REFERENCES person(id),
+  order_type   INT UNSIGNED NOT NULL, FOREIGN KEY(order_type) REFERENCES order_type(id),
+  notes        TEXT
+);
+
+DESCRIBE po;
+
+################################## po_item ####################################
+
+CREATE TABLE po_item (
+  id           INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
+  item_id      INT UNSIGNED NOT NULL, FOREIGN KEY(item_id) REFERENCES item(id),
+  po_id        INT UNSIGNED NOT NULL, FOREIGN KEY(po_id) REFERENCES po(id),
+  qty          INT UNSIGNED NOT NULL,
+  price        DOUBLE,
+  notes        TEXT
+)
+  COMMENT = 'PO item - instance of item for particular PO'
+;
+
+system echo 'po_item table:';
+DESCRIBE po_item;
+
+################################# po_payment ##################################
+
+CREATE TABLE po_payment (
+  id           INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
+  type_id      INT UNSIGNED NOT NULL, FOREIGN KEY(type_id) REFERENCES payment_type(id),
+  po_id        INT UNSIGNED NOT NULL, FOREIGN KEY(po_id) REFERENCES po(id),
+  transaction  CHAR(128),
+  tax_paid     ENUM('YES','NO') NOT NULL DEFAULT 'YES' COMMENT 'sometimes no taxes for online purchases',
+  price        DOUBLE UNSIGNED, #currency ?
+  tax          DOUBLE UNSIGNED,
+  shipping     DOUBLE UNSIGNED,
+  total        DOUBLE UNSIGNED,
+  notes        TEXT
+)
+  COMMENT = 'PO payment - paymrnt type for particular PO'
+;
+
+system echo 'po_payment table:';
+DESCRIBE po_payment;
+
+
+SHOW TABLES;
+

@@ -1,0 +1,11 @@
+#@brief  Script to show Purchase Orders
+#@author Igor Lesik 2013
+#
+# mysql -t --user=igor < show-po.mysql
+
+USE podb;
+
+
+SELECT * FROM po;
+
+
