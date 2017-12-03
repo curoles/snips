@@ -1,0 +1,54 @@
+
+* {
+    margin: 0;
+}
+
+
+html, body {
+    height: 100%;
+    background: white;
+    font-family: Verdana;
+}
+
+.wrapper {
+    min-height: 100%;
+    /*height: auto !important; height: 100%; for IE6*/ 
+
+    /* the bottom margin is the negative value of the full footer's height
+       including any padding or borders */
+    margin: 0 auto -1em 0;
+
+    max-width: 1000px;
+    min-width: 800px;
+
+    background: white;
+}
+
+footer, .footer_pusher {
+    height: 1em; /* '.pusher' must be the same height as 'footer' */
+    clear: both;
+    background: white;
+    margin: 0;
+}
+
+header {
+    background: white;
+}
+
+nav#menu {
+    background: white;
+    float: left;
+    width: 19%;
+    display:block;
+    min-height: 20em;
+}
+
+div#content {
+    width: 80%; float: right;
+}
+
+article, h2, p {
+    margin: 0.5em auto;
+}
+
+
