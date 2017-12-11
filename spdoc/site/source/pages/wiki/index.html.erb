@@ -6,61 +6,13 @@
 <div class="row">
   <div class="col-sm-3">
 
- <ul class="nav nav-pills nav-stacked nav-tree" id="myTree" data-toggle="nav-tree">
-     <li>
-         <a href="http://www.example.com" target="_blank">Item One (With Children) (has link)</a>
-         <ul class="nav nav-pills nav-stacked nav-tree">
-             <li>
-                 <a href="#">Item A (Without Children)</a>
-             </li>
-             <li>
-                 <a href="#">Item B (Without Children)</a>
-             </li>
-             <li>
-                 <a href="#">Item C (Without Children)</a>
-             </li>
-         </ul>
-     </li>
-     <li>
-         <a href="#">Item Two (Without Children)</a>
-     </li>
-     <li>
-         <a href="#">Item Three (With Children and Grandchildren)</a>
-         <ul class="nav nav-pills nav-stacked nav-tree">
-             <li>
-                 <a href="#">Item A (With Children)</a>
-                 <ul class="nav nav-pills nav-stacked nav-tree">
-                     <li>
-                         <a href="#">Item I (Without Children)</a>
-                     </li>
-                     <li>
-                         <a href="#">Item II (Without Children)</a>
-                     </li>
-                     <li class="active">
-                         <a href="#">Item III (Without Children)</a>
-                     </li>
-                 </ul>
-             </li>
-             <li>
-                 <a href="#">Item B (Without Children)</a>
-             </li>
-             <li>
-                 <a href="#">Item C (With Children)</a>
-                 <ul class="nav nav-pills nav-stacked nav-tree">
-                     <li>
-                         <a href="#">Item I (Without Children)</a>
-                     </li>
-                     <li>
-                         <a href="#">Item II (Without Children)</a>
-                     </li>
-                     <li>
-                         <a href="#">Item III (Without Children)</a>
-                     </li>
-                 </ul>
-             </li>
-         </ul>
-     </li>
- </ul>
+<ul class="nav nav-pills nav-stacked nav-tree" id="myTree" data-toggle="nav-tree">
+<% wikis = sitemap.resources.select {|r| r.destination_path.starts_with?("pages/wiki")} -%>
+<% res_tree = resource_tree(wikis, 'pages/wiki/') -%>
+<% ul = '<ul class="nav nav-pills nav-stacked nav-tree">' -%>
+<%= print_resource_tree(res_tree, ul, 4) -%>
+</ul>
+
   </div>
 
   <div class="col-sm-9" style="background-color:pink;">
