@@ -1,3 +1,7 @@
+---
+title: How to see your documentation with Web browser
+---
+
 Once .html files are created you can see them locally
 in your Web browser by running a web-server.
 

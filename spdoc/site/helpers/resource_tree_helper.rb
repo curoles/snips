@@ -14,8 +14,9 @@ def resource_tree(resources=sitemap.resources, strip_prefix='pages/')
         parts = resource.destination_path.partition(strip_prefix)[2].split('/')
         tree_node = tree
         parts.each do |part|
-            tree_node[part] = {} unless tree_node.has_key?(part)
-            tree_node = tree_node[part]
+            key = if part.equal?(parts.last) then resource else part end
+            tree_node[key] = {} unless tree_node.has_key?(key)
+            tree_node = tree_node[key]
         end
     end
     tree
@@ -27,9 +28,12 @@ def print_resource_tree(hash, ul='<ul>', indent=0)
     hash.each do |key,val|
         is_leaf = val.empty?
         if is_leaf
-            output << (' '*indent) + "<li>" + '<a href="#">' + key + "</a>" + "</li>"> + "\n"
+            path = key.destination_path #TODO use key.url
+            title = key.data.title || path
+            output << (' '*indent) + "<li>" + "<a href=\"/#{path}\">" + title + "</a>" + "</li>"> + "\n"
         else
-            output << (' '*indent) + "<li>" + '<a href="#">' + key + '</a>' + "\n"
+            folder_name = key.gsub('_',' ').gsub(/\b\w/, &:capitalize)
+            output << (' '*indent) + "<li>" + '<a href="#">' + folder_name + '</a>' + "\n"
             output << (' '*indent) + ul + "\n"
             output << print_resource_tree(val, ul, indent + 4)
             output << (' '*indent) + "</ul></li>\n"

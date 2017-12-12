@@ -1,3 +1,7 @@
+---
+title: Build SPDoc own documentation
+---
+
 # Build Documentation for SPDoc project
 
 SPDoc project itself uses SPDoc do document the project.

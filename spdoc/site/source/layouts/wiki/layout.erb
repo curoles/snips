@@ -1,0 +1,23 @@
+<% wrap_layout :layout do %>
+
+  <%= stylesheet_link_tag "bootstrap-treenav" %>
+  <%= javascript_include_tag "bootstrap-treenav" %>
+
+  <div class="row">
+    <div class="col-sm-3"> <!--style="background-color:gray;"-->
+
+    <ul class="nav nav-pills nav-stacked nav-tree" id="myTree" data-toggle="nav-tree">
+    <% wikis = sitemap.resources.select {|r| r.destination_path.starts_with?("pages/wiki")} -%>
+    <% res_tree = resource_tree(wikis, 'pages/wiki/') -%>
+    <% ul = '<ul class="nav nav-pills nav-stacked nav-tree">' -%>
+    <%= print_resource_tree(res_tree, ul, 4) -%>
+    </ul>
+
+    </div>
+
+    <div class="col-sm-9"> <!--style="background-color:pink;"-->
+      <%= yield %>
+    </div>
+
+  </div>
+<% end %>

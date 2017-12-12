@@ -49,6 +49,7 @@ activate :bh
 
 # With alternative layout
 # page '/path/to/file.html', layout: 'other_layout'
+page "/pages/wiki/*", :layout => "wiki/layout"
 
 # Proxy pages
 # https://middlemanapp.com/advanced/dynamic-pages/

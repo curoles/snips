@@ -1,24 +1,5 @@
+---
+title: Wiki Index
+---
 
-    <%= stylesheet_link_tag "bootstrap-treenav" %>
-    <%= javascript_include_tag "bootstrap-treenav" %>
-
-
-<div class="row">
-  <div class="col-sm-3">
-
-<ul class="nav nav-pills nav-stacked nav-tree" id="myTree" data-toggle="nav-tree">
-<% wikis = sitemap.resources.select {|r| r.destination_path.starts_with?("pages/wiki")} -%>
-<% res_tree = resource_tree(wikis, 'pages/wiki/') -%>
-<% ul = '<ul class="nav nav-pills nav-stacked nav-tree">' -%>
-<%= print_resource_tree(res_tree, ul, 4) -%>
-</ul>
-
-  </div>
-
-  <div class="col-sm-9" style="background-color:pink;">
-<i class="fa fa-plus-square-o" aria-hidden="false"></i>
-
-    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-  </div>
-
-</div>
+<h1>Wiki</h1>
