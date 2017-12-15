@@ -61,14 +61,13 @@ class TicketTool
 
         def make_ticket_file(dry_run: false)
             path_parts = [category, date.year.to_s, user]
-            file_name = "#{date.year}-#{date.month}-#{date.day}-#{title}.html.md.erb"
+            file_name = "#{date.year}-#{date.month}-#{date.day}-#{title.gsub(/\s/,'_')}.html.md.erb"
             path = SPDoc.make_file(prefix, path_parts, file_name, dry_run: dry_run)
             File.write(path, text) unless dry_run
         end
 
         def text
-%{
----
+%{---
 
 title: #{@title}
 date: #{@date.strftime('%Y/%m/%d')}
@@ -132,8 +131,9 @@ assignee: #{@user}
 
     def ask_title(tkt)
         tkt.title =
-        if @options[:title] then @options[:title].strip.gsub(/\s/,'_')
-        else ask("Title?  ") { |q| q.validate = /\A\S+\Z/ } end
+        if @options[:title] then @options[:title]
+        else ask("Title?  ") end # { |q| q.validate = /\A\S+\Z/ } end
+        tkt.title.strip!
         tkt
     end
 

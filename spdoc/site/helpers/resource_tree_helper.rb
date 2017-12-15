@@ -23,14 +23,15 @@ def resource_tree(resources=sitemap.resources, strip_prefix='pages/')
 end
 
 # hash is output of resource_tree and its type is Hash 
-def print_resource_tree(hash, ul='<ul>', indent=0)
+def print_resource_tree(hash, ul='<ul>', indent=0, href_target='')
     output = ""
     hash.each do |key,val|
         is_leaf = val.empty?
         if is_leaf
             path = key.destination_path #TODO use key.url
             title = key.data.title || path
-            output << (' '*indent) + "<li>" + "<a href=\"/#{path}\">" + title + "</a>" + "</li>"> + "\n"
+            output << (' '*indent) + "<li>" +
+                "<a href=\"/#{path}\" #{href_target}>" + title + "</a>" + "</li>"> + "\n"
         else
             folder_name = key.gsub('_',' ').gsub(/\b\w/, &:capitalize)
             output << (' '*indent) + "<li>" + '<a href="#">' + folder_name + '</a>' + "\n"

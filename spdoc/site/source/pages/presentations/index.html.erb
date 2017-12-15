@@ -1,0 +1,28 @@
+
+  <%= stylesheet_link_tag "bootstrap-treenav" -%>
+  <%= javascript_include_tag "bootstrap-treenav" -%>
+
+  <div class="row" style="height: 100%;">
+    <div class="col-sm-3"> 
+
+    <ul class="nav nav-pills nav-stacked nav-tree" id="myTree" data-toggle="nav-tree">
+    <% presentations = sitemap.resources.select {|r| r.destination_path.starts_with?("pages/presentations")} -%>
+    <% res_tree = resource_tree(presentations, 'pages/presentations/') -%>
+    <% ul = '<ul class="nav nav-pills nav-stacked nav-tree">' -%>
+    <%= print_resource_tree(res_tree, ul, 4, 'target="iframe_presentation"') -%>
+    </ul>
+
+    </div>
+
+    <div class="col-sm-9" style="height: 90vh;">
+       <!--p><a href="https://www.w3schools.com" target="iframe_a">W3Schools.com</a></p-->
+       <iframe
+           height="100%" width="100%"
+           src="/pages/presentations/presentations.html"
+           style="border:none;"
+           name="iframe_presentation">
+       </iframe> 
+    </div>
+
+  </div>
+

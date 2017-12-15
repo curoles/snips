@@ -1,0 +1,24 @@
+---
+
+title: Install common javascripts to use SPDoc offline
+date: 2017/12/14
+user: igor
+category: task
+status: open
+progress: 5
+tags: priority-medium
+assignee: igor
+
+---
+
+# Install common javascripts to use SPDoc offline
+
+Plan:
+
+- inside javascripts directory make sub-directory
+  called third_party and add it to the .gitignore;
+- with wget or curl download javascripts, since each
+  file will be `make` target downloading will happen
+  only one time;
+- change the link to use local version of JS files;
+- do the same for CSS files, stylesheets directory.
