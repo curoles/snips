@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<!-- Author: Igor Lesik 2017 -->
+<!-- Brief:  Simple in browser text editor, text is saved -->
+<!--         between sessions. -->
+<!-- -->
+<!-- Inspiration: book "HTML5" by Mike McGrath, chapter "Storing User data" -->
+<!-- Note: free HTML validator at validator.w3.org -->
+<!---->
+
+<html lang="en">
+
+<head>
+  <title>Quck Memo</title>
+  <meta charset="UTF-8">
+
+  <style>
+    /* Setting the box-sizing to border-box allows the textarea to respect
+     * its parent container's padding and border, recalculating what 100% actually means.
+     * If the box-sizing were content-box, the textarea would continue
+     * to stretch outside the parent container as it would have before.
+     */
+    textarea {
+    	-webkit-box-sizing: border-box;
+    	-moz-box-sizing: border-box;
+    	box-sizing: border-box;
+    
+    	width: 100%;
+    }
+  </style>
+
+  <script>
+    function saveMemo()
+    {
+        var title = document.getElementById("usertitle").value
+        if (title === "null" || title === "") {
+          alert("Error! Please, provide a title for your memo.")
+          return false;
+        }
+        localStorage.setItem("title", title)
+        document.getElementById("titlelegend").innerHTML =
+          "Memo: \"" + title + "\""
+    }
+
+    function clearMemo()
+    {
+      document.getElementById("usertitle").value = ""
+      document.getElementById("usertext").value = ""
+      document.getElementById("titlelegend").innerHTML = "Memo"
+    }
+  </script>
+
+</head>
+
+<body>
+
+  <fieldset>
+    <legend id="titlelegend">Memo</legend>
+    <label>Title: </label>
+    <input type="text" id="usertitle"/>
+    <button title="Save this memo into browser local storage"
+        onclick="saveMemo()">Save</button>
+    <button title="Show last saved memo from browser local storage"
+      onclick="restoreMemo()">Restore</button>
+    <button title="Remove saved memo from browser local storage"
+      onclick="removeMemo()">Remove</button>
+    <button title="Clear title and text of the memo"
+      onclick="clearMemo()">Clear</button>
+  </fieldset>
+
+  <fieldset>
+    <legend id="textlegend">Text</legend>
+    <textarea id="usertext" name="memo" rows="30"></textarea>
+
+  </fieldset>
+
+</body>
+
+</html>
