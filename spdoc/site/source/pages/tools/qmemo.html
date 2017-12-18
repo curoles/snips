@@ -32,13 +32,20 @@
     function saveMemo()
     {
         var title = document.getElementById("usertitle").value
-        if (title === "null" || title === "") {
+        if (title === null || title === "") {
           alert("Error! Please, provide a title for your memo.")
           return false;
         }
         localStorage.setItem("title", title)
         document.getElementById("titlelegend").innerHTML =
           "Memo: \"" + title + "\""
+
+        var text = document.getElementById("usertext").value
+        if (text === null || text === "") {
+          alert("Memo is empty!")
+          return false;
+        }
+        localStorage.setItem("text", text)
     }
 
     function clearMemo()
@@ -47,11 +54,34 @@
       document.getElementById("usertext").value = ""
       document.getElementById("titlelegend").innerHTML = "Memo"
     }
+
+    function restoreMemo()
+    {
+        if (localStorage.getItem("title") != null) {
+          var title = localStorage.getItem("title")
+          document.getElementById("usertitle").value = title
+          document.getElementById("titlelegend").innerHTML =
+            "Memo: \"" + title + "\""
+        }
+
+        if (localStorage.getItem("text") != null) {
+          var text = localStorage.getItem("text")
+          document.getElementById("usertext").value = text
+        }
+    }
+
+    function removeMemo()
+    {
+      localStorage.removeItem("title")
+      localStorage.removeItem("text")
+      clearMemo()
+    }
+
   </script>
 
 </head>
 
-<body>
+<body onload="restoreMemo()">
 
   <fieldset>
     <legend id="titlelegend">Memo</legend>
