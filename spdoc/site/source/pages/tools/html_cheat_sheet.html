@@ -4,113 +4,154 @@
 <html lang="en">
 
 <head>
-  <title>HTML Cheat Sheet</title>
+  <title>HTML Cheat Sheet - SPDoc</title>
   <meta charset="UTF-8">
 
   <style>
   pre {
-    background: white
+    background: white;
+    border: 5px solid green;
+    padding: 5px;
+    margin: 5px;
+  }
+  article {
+    background: lavender
   }
   </style>
 
-  <!--script>
-  </script-->
+  <script>
+  function replace_lt(str) {
+    return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function show_code(element_id, code) {
+    let element = document.getElementById(element_id);
+    element.innerHTML = replace_lt(code);
+    element.onclick = function() {
+      window.open('').document.write(code);
+    };
+    element.setAttribute("contextmenu", element_id+"_menu");
+    element.innerHTML = element.innerHTML +
+      '<menu type="context" id="'+element_id+'_menu">' +
+      '<menuitem label="Render Code in New Window" onclick=' +
+      '\'document.getElementById("'+element_id+'").onclick();\' ></menuitem></menu>';
+  }
+  </script>
 
 </head>
 
-<body style="background-color:red">
+<body style="background:cornsilk">
 
-  I am body.
+<h1>HTML Cheat Sheet</h1>
 
-  <header style="background-color:aqua">
-     This is <em>header</em>.
-     Code: <code>&lt;header style="background-color:aqua"&gt;...&lt;/header&gt;</code>
-  </header>
+<p>This page uses HTML5.
+Tested with <strong>Firefox</strong>.
+HTML code examples could be rendered in the browser right away,
+just click somewhere inside code box and new window shall open.
+In Firefox, you can right click to open context menu and select
+menu item <samp>Render Code in New Window</samp>.
+</p>
 
-  <main style="background-color:orange">
+<!--aside>
+<img src="https://www.w3.org/html/logo/badge/html5-badge-h-solo.png" width="63" height="64" alt="HTML5 Powered" title="HTML5 Powered">
+</aside-->
 
-  I am main.
+<!-- ========================================== -->
+<article><h2>HTML Files Examples and Templates</h2>
 
-  <section style="background-color:green">
+<dl>
 
-  I am section.
+<dt>Minimal HTML</dt>
+<dd><details><summary>Define document type, head section and body section</summary>
+<pre><code id="minimal_html_code"></code></pre><script>let minimal_html_code =
+`<!DOCTYPE HTML>
 
-  <article style="background-color:peru">
-  I am article.
-  
-  <h2>Minimal HTML</h2>
+<html lang="en">
 
-  <pre><code><!-- Code for Minimal HTML-->
-&lt;!DOCTYPE HTML&gt;
-&lt;!-- Note: free HTML validator at validator.w3.org --&gt;
+<head>
+  <title>Brief Description - Project/Company</title>
+  <meta charset="UTF-8">
+</head>
 
-&lt;html lang="en"&gt;
+<body>This is an example of minimal HTML file.
+</body>
 
-&lt;head&gt;
-  &lt;title&gt;Minimal HTML&lt;/title&gt;
-  &lt;meta charset="UTF-8"&gt;
+</html>
+`;
+show_code("minimal_html_code", minimal_html_code);
+</script></details>
+</dd>
 
-  &lt;!--style&gt;
-  &lt;/style--&gt;
 
-  &lt;!--script&gt;
-  &lt;/script--&gt;
+<dt>Describe document</dt>
+<dd><details><summary><strong>&lt;meta&gt;</strong> tags can be used to provide descriptive
+information to search engines</summary>
+<pre><code id="describe_doc_code"></code></pre><script>let describe_doc_code =
+`<!DOCTYPE HTML>
 
-&lt;/head&gt;
+<html lang="en">
 
-&lt;body&gt;
+<head>
+  <title>Describe HTML - Example</title>
+  <meta charset="UTF-8">
 
-&lt;/body&gt;
+  <meta name="description" content="An example of describing document for search engines.">
+  <meta name="keywords" content="html,example,metadata">
+</head>
 
-&lt;/html&gt;
-  </code></pre>
+<body><p>In Firefox use Page Info dialog on the context menu.
+to see the meta data.</p>
+</body>
 
-  <h2>Embedded CSS style for pre</h2>
+</html>
+`;
+show_code("describe_doc_code", describe_doc_code);
+</script></details>
+</dd>
 
-  <pre><code>
-&lt;head&gt;
 
-  &lt;style&gt;
-  pre {
-    background: white
-  }
-  &lt;/style&gt;
-  </pre></code>
 
-  </article>
-  </section>
 
-  Section ended, new section is about to begin.
+<dt>Automatically refresh the page after timeout</dt>
+<dd>
+<pre><code id="refreshing_code"></code></pre><script> let refreshing_code =
+`<meta http-equiv="refresh" content="5">
+<meta http-equiv="refresh" content="5; url='new-page.html'">
+`;
+show_code("refreshing_code", refreshing_code);
+</script>
+</dd>
 
-  <section style="background-color:springgreen">
-  <h1>Useful links</h1>
-  <article>
-  I am article.
-  <dl>List of useful link:
-    <dt>HTML Colors Names</dt>
-    <dd><a href=https://www.w3schools.com/colors/colors_names.asp>Colors names</a></dd>
-    <dt>HTML Tags</dt>
-    <dd>https://www.w3schools.com/tags/</dd>
-  </dl>
-  </article>
-  </section>
+</dl>
 
-  Section ended.
+</article>
 
-  <details>
-  I am details.
-  <summary>I am summary</summary>
-  0 1 2 3
-  </details>
 
-  </main>
 
-  Main ended, footer will begin.
 
-  <footer style="background-color:aqua">
-     This is <em>footer</em>.
-     Code: <code>&lt;footer style="background-color:aqua"&gt;...&lt;/footer&gt;</code>
-  </footer>
+<!-- ========================================== -->
+<article><h2>Useful information</h2>
+
+<dl>
+  <dt>HTML <a href=https://validator.w3.org>validator</a></dt>
+  <dt>HTML <a href=https://www.w3schools.com/tags/>Tags</a></dt>
+  <dt>HTML <a href=https://www.w3schools.com/colors/colors_names.asp>Colors names</a></dt>
+  <dt>https://www.w3schools.com/css/css_boxmodel.asp</dt>
+</dl>
+
+
+</article>
+
+<!-- ========================================== -->
+<article><h2>Books</h2>
+
+<dl>
+  <dt>HTML5 in easy steps. Mike McGrath.</dt>
+  <dd>Download <a href=http://ineasysteps.com/resource-centre/downloads/>link</a></dd>
+</dl>
+
+
+</article>
 
 </body>
 
